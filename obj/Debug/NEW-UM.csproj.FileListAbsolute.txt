@@ -1,0 +1,15 @@
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\NEW-UM.csproj.AssemblyReference.cache
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\NEW-UM.csproj.SuggestedBindingRedirects.cache
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\MainWindow.baml
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\MainWindow.g.cs
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\App.g.cs
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\NEW-UM_MarkupCompile.cache
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\NEW-UM.g.resources
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\NEW_UM.Properties.Resources.resources
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\NEW-UM.csproj.GenerateResource.cache
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\NEW-UM.csproj.CoreCompileInputs.cache
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Debug\NEW-UM.exe.config
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Debug\NEW-UM.exe
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Debug\NEW-UM.pdb
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\NEW-UM.exe
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\NEW-UM.pdb
