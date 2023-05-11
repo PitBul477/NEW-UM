@@ -1,20 +1,21 @@
-﻿<Window x:Class="NEW_UM.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		KeyDown="Window_KeyDown" Title="Угадай Мелодию" Height="432" Width="763" ResizeMode="NoResize"
-        ScrollViewer.VerticalScrollBarVisibility="Disabled" Icon="/Иконка.png">
-	<FrameworkElement.Resources>
+		xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="NEW_UM.MainWindow"
+		KeyDown="Window_KeyDown" Title="Угадай Мелодию" Height="432" Width="763"
+        ScrollViewer.VerticalScrollBarVisibility="Disabled" Icon="/Иконка.png" ResizeMode="NoResize">
+	<Window.Resources>
 		<Style TargetType="{x:Type Button}">
-			<Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true"/>
-			<Setter Property="Control.Template">
+			<Setter Property="OverridesDefaultStyle" Value="true"/>
+			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="{x:Type Button}">
 						<Grid>
 							<Rectangle Fill="#00911e42" Height="40" Width="30" RadiusX="5" RadiusY="5"/>
 							<Ellipse Fill="Black" Width="17" Height="16">
-								<UIElement.RenderTransform>
+								<Ellipse.RenderTransform>
 									<TranslateTransform X="-6.9" Y="11.2"/>
-								</UIElement.RenderTransform>
+								</Ellipse.RenderTransform>
 							</Ellipse>
 							<Polygon Points="16,13 12,35 16,33" Fill="Black"/>
 							<Polygon Points="14,7 16,14 14,26" Fill="Black"/>
@@ -32,9 +33,9 @@
 				</Setter.Value>
 			</Setter>
 			<Style.Triggers>
-				<Trigger Property="UIElement.IsEnabled" Value="false">
-					<Setter Property="Control.Background" Value="Black"/>
-					<Setter Property="Control.Template">
+				<Trigger Property="IsEnabled" Value="false">
+					<Setter Property="Background" Value="Black"/>
+					<Setter Property="Template">
 						<Setter.Value>
 							<ControlTemplate TargetType="{x:Type Button}">
 								<Grid>
@@ -59,134 +60,136 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-	</FrameworkElement.Resources>
+	</Window.Resources>
 	<Grid x:Name="layoutGrid" Background="#FFAA1741">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="234*"/>
-			<ColumnDefinition Width="529*"/>
+			<ColumnDefinition Width="0"/>
+			<ColumnDefinition Width="234"/>
+			<ColumnDefinition Width="529"/>
 		</Grid.ColumnDefinitions>
-		<ProgressBar x:Name="pgpoint" HorizontalAlignment="Left" Height="22" Margin="106,15,0,0" VerticalAlignment="Top"
-                 Width="120" Grid.Column="1"/>
+		<ProgressBar x:Name="pgpoint" HorizontalAlignment="Left" Height="22" Margin="107,15,0,0" VerticalAlignment="Top"
+                 Width="120" Grid.Column="2"/>
 		<TextBlock x:Name="points" HorizontalAlignment="Left" TextAlignment="Center" Height="22" Margin="106,15,0,0"
-               Width="120" VerticalAlignment="Top" TextWrapping="Wrap" FontSize="16" Grid.Column="1"/>
-		<TextBox x:Name="first" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="23"
-             Margin="22,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" IsReadOnly="true"/>
-		<TextBox x:Name="second" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="23"
-             Margin="22,116,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" IsReadOnly="true"/>
-		<TextBox x:Name="third" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="23"
-             Margin="22,161,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" IsReadOnly="true"/>
-		<TextBox x:Name="fourth" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="23"
-             Margin="22,206,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" IsReadOnly="true"/>
-		<TextBox x:Name="fifth" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="23"
-             Margin="22,251,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" IsReadOnly="true"/>
-		<TextBox x:Name="sixth" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="23"
-             Margin="22,296,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" IsReadOnly="true"/>
-		<ProgressBar x:Name="progress" HorizontalAlignment="Left" Margin="25,340,0,0" Width="700" Height="48"
-                 VerticalAlignment="Top" Maximum="48" Grid.ColumnSpan="2"/>
-		<Image x:Name="imageback" HorizontalAlignment="Left" Height="403" VerticalAlignment="Top" Width="757" Grid.ColumnSpan="2"/>
-		<ComboBox SelectionChanged="Cb_SelectionChanged" x:Name="cb" HorizontalAlignment="Left" Margin="62,15,0,0"
-              VerticalAlignment="Top" Width="120">
-			<TextBlock>1 РАУНД</TextBlock>
-			<TextBlock>2 РАУНД</TextBlock>
-			<TextBlock>ФИНАЛ</TextBlock>
+               Width="120" VerticalAlignment="Top" TextWrapping="Wrap" FontSize="16" Grid.Column="2"/>
+		<TextBox x:Name="topic1" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="23"
+             Margin="22,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" IsReadOnly="true" Grid.ColumnSpan="2"/>
+		<TextBox x:Name="topic2" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="23"
+             Margin="22,116,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" IsReadOnly="true" Grid.ColumnSpan="2"/>
+		<TextBox x:Name="topic3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="23"
+             Margin="22,161,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" IsReadOnly="true" Grid.ColumnSpan="2"/>
+		<TextBox x:Name="topic4" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="23"
+             Margin="22,206,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" IsReadOnly="true" Grid.ColumnSpan="2"/>
+		<TextBox x:Name="topic5" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="23"
+             Margin="22,251,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" IsReadOnly="true" Grid.ColumnSpan="2"/>
+		<TextBox x:Name="topic6" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="23"
+             Margin="22,296,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" IsReadOnly="true" Grid.ColumnSpan="2"/>
+		<ProgressBar x:Name="progress" HorizontalAlignment="Left" Margin="26,340,0,0" Width="700" Height="48"
+                 VerticalAlignment="Top" Maximum="48" Grid.ColumnSpan="3"/>
+		<Image x:Name="imageback" HorizontalAlignment="Left" Height="403" VerticalAlignment="Top" Width="757" Grid.ColumnSpan="3"/>
+		<ComboBox SelectionChanged="Cb_SelectionChanged" x:Name="cb" HorizontalAlignment="Left" Margin="63,15,0,0"
+              VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2">
+			<TextBlock><Run Text="1 РАУНД"/></TextBlock>
+			<TextBlock><Run Text="2 РАУНД"/></TextBlock>
+			<TextBlock><Run Text="ФИНАЛ"/></TextBlock>
 		</ComboBox>
 		<Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="280" Margin="21,52,0,0"
-            VerticalAlignment="Top" Width="472" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="472" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt11" Content="1" HorizontalAlignment="Left" Margin="51,60,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt12" Content="2" HorizontalAlignment="Left" Margin="106,60,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt13" Content="3" HorizontalAlignment="Left" Margin="161,60,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt14" Content="4" HorizontalAlignment="Left" Margin="216,60,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt15" Content="5" HorizontalAlignment="Left" Margin="271,60,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt16" Content="6" HorizontalAlignment="Left" Margin="326,60,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt17" Content="7" HorizontalAlignment="Left" Margin="381,60,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt18" Content="8" HorizontalAlignment="Left" Margin="436,60,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt21" Content="1" HorizontalAlignment="Left" Margin="51,105,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt22" Content="2" HorizontalAlignment="Left" Margin="106,105,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt23" Content="3" HorizontalAlignment="Left" Margin="161,105,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt24" Content="4" HorizontalAlignment="Left" Margin="216,105,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt25" Content="5" HorizontalAlignment="Left" Margin="271,105,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt26" Content="6" HorizontalAlignment="Left" Margin="326,105,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt27" Content="7" HorizontalAlignment="Left" Margin="381,105,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt28" Content="8" HorizontalAlignment="Left" Margin="436,105,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt31" Content="1" HorizontalAlignment="Left" Margin="51,150,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt32" Content="2" HorizontalAlignment="Left" Margin="106,150,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt33" Content="3" HorizontalAlignment="Left" Margin="161,150,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt34" Content="4" HorizontalAlignment="Left" Margin="216,150,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt35" Content="5" HorizontalAlignment="Left" Margin="271,150,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt36" Content="6" HorizontalAlignment="Left" Margin="326,150,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt37" Content="7" HorizontalAlignment="Left" Margin="381,150,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt38" Content="8" HorizontalAlignment="Left" Margin="436,150,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt41" Content="1" HorizontalAlignment="Left" Margin="51,195,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt42" Content="2" HorizontalAlignment="Left" Margin="106,195,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt43" Content="3" HorizontalAlignment="Left" Margin="161,195,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt44" Content="4" HorizontalAlignment="Left" Margin="216,195,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt45" Content="5" HorizontalAlignment="Left" Margin="271,195,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt46" Content="6" HorizontalAlignment="Left" Margin="326,195,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt47" Content="7" HorizontalAlignment="Left" Margin="381,195,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt48" Content="8" HorizontalAlignment="Left" Margin="436,195,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt51" Content="1" HorizontalAlignment="Left" Margin="51,240,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt52" Content="2" HorizontalAlignment="Left" Margin="106,240,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt53" Content="3" HorizontalAlignment="Left" Margin="161,240,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt54" Content="4" HorizontalAlignment="Left" Margin="216,240,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt55" Content="5" HorizontalAlignment="Left" Margin="271,240,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt56" Content="6" HorizontalAlignment="Left" Margin="326,240,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt57" Content="7" HorizontalAlignment="Left" Margin="381,240,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt58" Content="8" HorizontalAlignment="Left" Margin="436,240,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt61" Content="1" HorizontalAlignment="Left" Margin="51,285,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt62" Content="2" HorizontalAlignment="Left" Margin="106,285,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt63" Content="3" HorizontalAlignment="Left" Margin="161,285,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt64" Content="4" HorizontalAlignment="Left" Margin="216,285,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt65" Content="5" HorizontalAlignment="Left" Margin="271,285,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt66" Content="6" HorizontalAlignment="Left" Margin="326,285,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt67" Content="7" HorizontalAlignment="Left" Margin="381,285,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt68" Content="8" HorizontalAlignment="Left" Margin="436,285,0,0"
-            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="1"/>
+            VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
+		<CheckBox x:Name="Internet" Content="Интернет" HorizontalAlignment="Left" Margin="215,18,0,0" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
 	</Grid>
 </Window>

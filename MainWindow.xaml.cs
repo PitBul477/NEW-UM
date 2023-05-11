@@ -34,16 +34,18 @@ namespace NEW_UM
         private readonly TextBox[] _counterTexts = new TextBox[6];
         private TextBox _finalText;
         //Path = System.IO.Path;
+        private Socket _socket;
 
         public MainWindow()
         {
             InitializeComponent();
+            Internet.Checked += InternetEnable;
+            Internet.Unchecked += InternetDisable;
             _timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(1000) // в будущем будет возможность изменить время
             };
             _timer.Tick += (sender, e) => TimerTick();
-            ConnectToServer();
             try
             {
                 using (StreamReader streamReader = new StreamReader(path, Encoding.Default))
@@ -68,32 +70,22 @@ namespace NEW_UM
             }
         }
 
-        void ReadRound(StreamReader streamReader)
-        {
-            first.Text = streamReader.ReadLine();
-            second.Text = streamReader.ReadLine();
-            third.Text = streamReader.ReadLine();
-            fourth.Text = streamReader.ReadLine();
-            fifth.Text = streamReader.ReadLine();
-            sixth.Text = streamReader.ReadLine();
-        }
-        private async void ConnectToServer()
+        private async void InternetEnable(object sender, RoutedEventArgs e)
         {
             try
             {
                 // Создание сокета и установка соединения с сервером
-                Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                await socket.ConnectAsync("92.124.142.200", 12345);
-
+                _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                await _socket.ConnectAsync("92.124.142.200", 12345);
                 // Отправка сообщения на сервер
                 byte[] data = Encoding.UTF8.GetBytes($"3|{DateTime.Now:dd.MM.yyyy hh:mm:ss:fff}|{superClientId}");
-                await socket.SendAsync(new ArraySegment<byte>(data), SocketFlags.None);
+                await _socket.SendAsync(new ArraySegment<byte>(data), SocketFlags.None);
 
                 // Получение сообщений от сервера
                 while (true)
                 {
                     byte[] buffer = new byte[1024];
-                    int bytes = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), SocketFlags.None);
+                    int bytes = await _socket.ReceiveAsync(new ArraySegment<byte>(buffer), SocketFlags.None);
                     string message = Encoding.UTF8.GetString(buffer, 0, bytes);
                     if (message.IndexOf("Вы подключились как суперклиент") != 0)
                     {
@@ -115,6 +107,34 @@ namespace NEW_UM
                 MessageBox.Show($"Ошибка подключения: {ex.Message}");
             }
         }
+
+        private void InternetDisable(object sender, RoutedEventArgs e)
+        {
+            if (_socket != null && _socket.Connected)
+            {
+                try
+                {
+                    _socket.Shutdown(SocketShutdown.Both);
+                    _socket.Close();
+                    _socket = null;
+                    MessageBox.Show("Отключение от сервера успешно");
+                }
+                catch (SocketException ex)
+                {
+                    MessageBox.Show($"Ошибка отключения: {ex.Message}");
+                }
+            }
+        }
+
+        void ReadRound(StreamReader streamReader)
+        {
+            topic1.Text = streamReader.ReadLine();
+            topic2.Text = streamReader.ReadLine();
+            topic3.Text = streamReader.ReadLine();
+            topic4.Text = streamReader.ReadLine();
+            topic5.Text = streamReader.ReadLine();
+            topic6.Text = streamReader.ReadLine();
+        }        
 
         private void TimerTick()
         {
@@ -174,60 +194,40 @@ namespace NEW_UM
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string name = ((FrameworkElement)e.OriginalSource).Name;
-            ((UIElement)e.OriginalSource).IsEnabled = false;
-            if (name.IndexOf("bt") != 0)
-                return;
-            string str = name.Substring(2);
-            char ch = str[0];
-            _icounter = int.Parse(ch.ToString());
-            ch = str[0];
-            switch (ch)
+            if (!(e.OriginalSource is FrameworkElement source)) return;
+            var name = source.Name;
+            source.IsEnabled = false;
+            if (!name.StartsWith("bt")) return;
+            var index = int.Parse(name.Substring(2, 1));
+            _icounter = index;
+            if (!(FindName($"topic{index}") is TextBox textBox))
             {
-                case '1':
-                    MusicPlay(first.Text, str[1].ToString());
-                    break;
-                case '2':
-                    MusicPlay(second.Text, str[1].ToString());
-                    break;
-                case '3':
-                    MusicPlay(third.Text, str[1].ToString());
-                    break;
-                case '4':
-                    MusicPlay(fourth.Text, str[1].ToString());
-                    break;
-                case '5':
-                    MusicPlay(fifth.Text, str[1].ToString());
-                    break;
-                case '6':
-                    MusicPlay(sixth.Text, str[1].ToString());
-                    break;
-                default:
-                    MessageBox.Show("Строка не определена");
-                    break;
+                MessageBox.Show("Строка не определена");
+                return;
             }
+
+            MusicPlay(textBox.Text, name.Substring(3, 1));
         }
+
 
         private void MusicPlay(string I, string No)
         {
-            string str1 = "../" + _round + "/" + I + "/";
-            _answer = "../" + _round + "/" + I + "/Ответ/" + No + ".mp3";
-            player.Open(new Uri(str1 + No + ".mp3", UriKind.RelativeOrAbsolute));
+            string str1 = $"../{_round}/{I}/";
+            _answer = $"../{_round}/{I}/Ответ/{No}.mp3";
+            //MessageBox.Show($"{str1}{No}.mp3");
+            player.Open(new Uri($"{str1}{No}.mp3", UriKind.RelativeOrAbsolute));
             player.Play();
             _player = 1;
+
             if (_round == "1 РАУНД")
             {
-                using (StreamReader streamReader = new StreamReader(str1 + "Баллы.txt", Encoding.UTF8))
-                {
-                    string str2 = "";
-                    for (int index = 0; index < Convert.ToInt32(No); ++index)
-                        str2 = streamReader.ReadLine();
-                    int num = str2.LastIndexOf('-');
-                    string str3 = str2.Remove(0, num + 2);
-                    points.Text = str3;
-                    pgpoint.Maximum = Convert.ToInt32(str3);
-                    pgpoint.Value = Convert.ToInt32(str3);
-                }
+                string[] lines = File.ReadAllLines($"{str1}Баллы.txt", Encoding.UTF8);
+                string str2 = lines[int.Parse(No) - 1];
+                int num = str2.LastIndexOf('-');
+                string str3 = str2.Substring(num + 2);
+                points.Text = str3;
+                pgpoint.Maximum = int.Parse(str3);
+                pgpoint.Value = int.Parse(str3);
             }
             else if (_round == "2 РАУНД")
             {
@@ -238,6 +238,7 @@ namespace NEW_UM
             _timer.Start();
             PrigressBarAdd();
         }
+
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
@@ -268,6 +269,82 @@ namespace NEW_UM
 
         private void Cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            switch (cb.SelectedIndex)
+            {
+                case 0:
+                    LoadRound("1 РАУНД", "images/1 Раунд.png", new string[] { "topic1", "topic2", "topic3", "topic4", "topic5", "topic6" });
+                    break;
+                case 1:
+                    LoadRound("2 РАУНД", "images/2 Раунд.png", new string[] { "topic1", "topic2", "topic3", "topic4", "topic5", "topic6" });
+                    break;
+                case 2:
+                    LoadFinalRound();
+                    break;
+            }
+        }
+
+        private void SetBackgroundImage(string imagePath)
+        {
+            layoutGrid.Background = new ImageBrush()
+            {
+                ImageSource = new BitmapImage(new Uri(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), imagePath)))
+            };
+        }
+
+        private void LoadFinalRound()
+        {
+            SetBackgroundImage("images/Финал.png");
+            layoutGrid.Children.Clear();
+            layoutGrid.ColumnDefinitions.Clear();
+            _timer.Interval = TimeSpan.FromMilliseconds(1000);
+            slider = new Slider
+            {
+                Maximum = 20,
+                Width = 655,
+                Height = 42,
+                Margin = new Thickness(50, 150, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                TickPlacement = TickPlacement.BottomRight,
+                IsSelectionRangeEnabled = true,
+                IsSnapToTickEnabled = true
+            };
+            slider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(Slider_ValueChanged);
+            button = new Button
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Height = 80,
+                Margin = new Thickness(250, 230, 0, 0),
+                VerticalAlignment = VerticalAlignment.Top,
+                Width = byte.MaxValue,
+                FontSize = 33,
+                FontFamily = new FontFamily("Book Antiqua"),
+                Style = Resources["X"] as Style
+            };
+            button.Click += new RoutedEventHandler(Button_Click1);
+            _finalText = new TextBox
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Height = 59,
+                Margin = new Thickness(50, 27, 0, 0),
+                TextWrapping = TextWrapping.Wrap,
+                VerticalAlignment = VerticalAlignment.Top,
+                Width = 655,
+                TextAlignment = TextAlignment.Center,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                FontSize = 33,
+                FontFamily = new FontFamily("Book Antiqua"),
+                Background = Brushes.AntiqueWhite
+            };
+            layoutGrid.Children.Add(button);
+            layoutGrid.Children.Add(slider);
+            layoutGrid.Children.Add(_finalText);
+            slider.Value = 20;
+            _round = "ФИНАЛ";
+        }
+
+        private void LoadRound(string roundName, string imagePath, string[] topicNames)
+        {
             if (_player == 1)
             {
                 player.Pause();
@@ -282,226 +359,73 @@ namespace NEW_UM
                     string str;
                     while ((str = streamReader.ReadLine()) != null)
                     {
-                        if (str == "1 РАУНД" && cb.SelectedIndex == 0)
+                        switch (str)
                         {
-                            imageback.Source = new BitmapImage(new Uri(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "images/1 Раунд.png")));
-                            first.Text = streamReader.ReadLine();
-                            second.Text = streamReader.ReadLine();
-                            third.Text = streamReader.ReadLine();
-                            fourth.Text = streamReader.ReadLine();
-                            fifth.Text = streamReader.ReadLine();
-                            sixth.Text = streamReader.ReadLine();
-                            _round = "1 РАУНД";
-                            break;
+                            case "ФИНАЛ":
+                                _final = streamReader.ReadLine();
+                                break;
+                            case var s when s == roundName:
+                                imageback.Source = new BitmapImage(new Uri(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), imagePath)));
+                                for (int i = 0; i < topicNames.Length; i++)
+                                {
+                                    var topic = FindName(topicNames[i]) as TextBox;
+                                    topic.Text = streamReader.ReadLine();
+                                }
+                                if (roundName == "2 РАУНД")
+                                {
+                                    pgpoint.Maximum = 200;
+                                    // Обратно включить кнопки
+                                    Button[] answerButtons = {
+                                        bt11, bt12, bt13, bt14, bt15,
+                                        bt21, bt22, bt23, bt24, bt25,
+                                        bt31, bt32, bt33, bt34, bt35,
+                                        bt41, bt42, bt43, bt44, bt45,
+                                        bt51, bt52, bt53, bt54, bt55,
+                                        bt61, bt62, bt63, bt64, bt65
+                                    };
+                                    foreach (Button button in answerButtons)
+                                    {
+                                        button.IsEnabled = true;
+                                    }
+                                    // Выключить лишние кнопки
+                                    Button[] buttonsToDisable = {
+                                        bt16, bt17, bt18, bt26, bt27, bt28,
+                                        bt36, bt37, bt38, bt46, bt47, bt48,
+                                        bt56, bt57, bt58, bt66, bt67, bt68
+                                    };
+                                    foreach (Button button in buttonsToDisable)
+                                    {
+                                        button.IsEnabled = false;
+                                        button.Visibility = Visibility.Collapsed;
+                                    }
+                                    // Создание новых текстовых полей
+                                    for (int i = 0; i < _counterTexts.Length; i++)
+                                    {
+                                        var textBox = new TextBox
+                                        {
+                                            Width = 140,
+                                            Height = 23,
+                                            Margin = new Thickness(327, 75 + i * 45, 0, 0),
+                                            VerticalAlignment = VerticalAlignment.Top,
+                                            HorizontalAlignment = HorizontalAlignment.Left,
+                                            IsReadOnly = true,
+                                            VerticalContentAlignment = VerticalAlignment.Center,
+                                            TextWrapping = TextWrapping.Wrap
+                                        };
+
+                                        layoutGrid.Children.Add(textBox);
+                                        Grid.SetColumn(textBox, 2);
+                                        _counterTexts[i] = textBox;
+                                    }
+                                    // остальные переменные
+                                    _round = "2 РАУНД";
+                                    progress.Value = 0;
+                                    progress.Maximum = 30;
+                                }
+                                else _round = "1 РАУНД";
+                                break;
                         }
-                        if (str == "2 РАУНД" && cb.SelectedIndex == 1)
-                        {
-                            imageback.Source = new BitmapImage(new Uri(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "images/2 Раунд.png")));
-                            pgpoint.Maximum = 200;
-                            first.Text = streamReader.ReadLine();
-                            second.Text = streamReader.ReadLine();
-                            third.Text = streamReader.ReadLine();
-                            fourth.Text = streamReader.ReadLine();
-                            fifth.Text = streamReader.ReadLine();
-                            sixth.Text = streamReader.ReadLine();
-                            bt11.IsEnabled = true;
-                            bt12.IsEnabled = true;
-                            bt13.IsEnabled = true;
-                            bt14.IsEnabled = true;
-                            bt15.IsEnabled = true;
-                            bt21.IsEnabled = true;
-                            bt22.IsEnabled = true;
-                            bt23.IsEnabled = true;
-                            bt24.IsEnabled = true;
-                            bt25.IsEnabled = true;
-                            bt31.IsEnabled = true;
-                            bt32.IsEnabled = true;
-                            bt33.IsEnabled = true;
-                            bt34.IsEnabled = true;
-                            bt35.IsEnabled = true;
-                            bt41.IsEnabled = true;
-                            bt42.IsEnabled = true;
-                            bt43.IsEnabled = true;
-                            bt44.IsEnabled = true;
-                            bt45.IsEnabled = true;
-                            bt51.IsEnabled = true;
-                            bt52.IsEnabled = true;
-                            bt53.IsEnabled = true;
-                            bt54.IsEnabled = true;
-                            bt55.IsEnabled = true;
-                            bt61.IsEnabled = true;
-                            bt62.IsEnabled = true;
-                            bt63.IsEnabled = true;
-                            bt64.IsEnabled = true;
-                            bt65.IsEnabled = true;
-                            bt16.IsEnabled = false;
-                            bt16.Visibility = Visibility.Collapsed;
-                            bt17.IsEnabled = false;
-                            bt17.Visibility = Visibility.Collapsed;
-                            bt18.IsEnabled = false;
-                            bt18.Visibility = Visibility.Collapsed;
-                            bt26.IsEnabled = false;
-                            bt26.Visibility = Visibility.Collapsed;
-                            bt27.IsEnabled = false;
-                            bt27.Visibility = Visibility.Collapsed;
-                            bt28.IsEnabled = false;
-                            bt28.Visibility = Visibility.Collapsed;
-                            bt36.IsEnabled = false;
-                            bt36.Visibility = Visibility.Collapsed;
-                            bt37.IsEnabled = false;
-                            bt37.Visibility = Visibility.Collapsed;
-                            bt38.IsEnabled = false;
-                            bt38.Visibility = Visibility.Collapsed;
-                            bt46.IsEnabled = false;
-                            bt46.Visibility = Visibility.Collapsed;
-                            bt47.IsEnabled = false;
-                            bt47.Visibility = Visibility.Collapsed;
-                            bt48.IsEnabled = false;
-                            bt48.Visibility = Visibility.Collapsed;
-                            bt56.IsEnabled = false;
-                            bt56.Visibility = Visibility.Collapsed;
-                            bt57.IsEnabled = false;
-                            bt57.Visibility = Visibility.Collapsed;
-                            bt58.IsEnabled = false;
-                            bt58.Visibility = Visibility.Collapsed;
-                            bt66.IsEnabled = false;
-                            bt66.Visibility = Visibility.Collapsed;
-                            bt67.IsEnabled = false;
-                            bt67.Visibility = Visibility.Collapsed;
-                            bt68.IsEnabled = false;
-                            bt68.Visibility = Visibility.Collapsed;
-                            _counterTexts[0] = new TextBox
-                            {
-                                Width = 140,
-                                Height = 23,
-                                Margin = new Thickness(560, 75, 0, 0),
-                                VerticalAlignment = VerticalAlignment.Top,
-                                HorizontalAlignment = HorizontalAlignment.Left,
-                                IsReadOnly = true,
-                                VerticalContentAlignment = VerticalAlignment.Center,
-                                TextWrapping = TextWrapping.Wrap
-                            };
-                            _counterTexts[1] = new TextBox
-                            {
-                                Width = 140,
-                                Height = 23,
-                                Margin = new Thickness(560, 120, 0, 0),
-                                VerticalAlignment = VerticalAlignment.Top,
-                                HorizontalAlignment = HorizontalAlignment.Left,
-                                IsReadOnly = true,
-                                VerticalContentAlignment = VerticalAlignment.Center,
-                                TextWrapping = TextWrapping.Wrap
-                            };
-                            _counterTexts[2] = new TextBox
-                            {
-                                Width = 140,
-                                Height = 23,
-                                Margin = new Thickness(560, 165, 0, 0),
-                                VerticalAlignment = VerticalAlignment.Top,
-                                HorizontalAlignment = HorizontalAlignment.Left,
-                                IsReadOnly = true,
-                                VerticalContentAlignment = VerticalAlignment.Center,
-                                TextWrapping = TextWrapping.Wrap
-                            };
-                            _counterTexts[3] = new TextBox
-                            {
-                                Width = 140,
-                                Height = 23,
-                                Margin = new Thickness(560, 210, 0, 0),
-                                VerticalAlignment = VerticalAlignment.Top,
-                                HorizontalAlignment = HorizontalAlignment.Left,
-                                IsReadOnly = true,
-                                VerticalContentAlignment = VerticalAlignment.Center,
-                                TextWrapping = TextWrapping.Wrap
-                            };
-                            _counterTexts[4] = new TextBox
-                            {
-                                Width = 140,
-                                Height = 23,
-                                Margin = new Thickness(560, 255, 0, 0),
-                                VerticalAlignment = VerticalAlignment.Top,
-                                HorizontalAlignment = HorizontalAlignment.Left,
-                                IsReadOnly = true,
-                                VerticalContentAlignment = VerticalAlignment.Center,
-                                TextWrapping = TextWrapping.Wrap
-                            };
-                            _counterTexts[5] = new TextBox
-                            {
-                                Width = 140,
-                                Height = 23,
-                                Margin = new Thickness(560, 300, 0, 0),
-                                VerticalAlignment = VerticalAlignment.Top,
-                                HorizontalAlignment = HorizontalAlignment.Left,
-                                IsReadOnly = true,
-                                VerticalContentAlignment = VerticalAlignment.Center,
-                                TextWrapping = TextWrapping.Wrap
-                            };
-                            layoutGrid.Children.Add(_counterTexts[0]);
-                            layoutGrid.Children.Add(_counterTexts[1]);
-                            layoutGrid.Children.Add(_counterTexts[2]);
-                            layoutGrid.Children.Add(_counterTexts[3]);
-                            layoutGrid.Children.Add(_counterTexts[4]);
-                            layoutGrid.Children.Add(_counterTexts[5]);
-                            _round = "2 РАУНД";
-                            progress.Value = 0;
-                            progress.Maximum = 30;
-                            break;
-                        }
-                        if (str == "ФИНАЛ")
-                            _final = streamReader.ReadLine();
                     }
-                    if (cb.SelectedIndex != 2)
-                        return;
-                    layoutGrid.Background = new ImageBrush()
-                    {
-                        ImageSource = new BitmapImage(new Uri(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "images/Финал.png")))
-                    };
-                    layoutGrid.Children.Clear();
-                    _timer.Interval = TimeSpan.FromMilliseconds(1000);
-                    slider = new Slider
-                    {
-                        Maximum = 20,
-                        Width = 655,
-                        Height = 42,
-                        Margin = new Thickness(50, 150, 0, 0),
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        VerticalAlignment = VerticalAlignment.Top,
-                        TickPlacement = TickPlacement.BottomRight,
-                        IsSelectionRangeEnabled = true,
-                        IsSnapToTickEnabled = true
-                    };
-                    slider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(Slider_ValueChanged);
-                    button = new Button
-                    {
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        Height = 80,
-                        Margin = new Thickness(250, 230, 0, 0),
-                        VerticalAlignment = VerticalAlignment.Top,
-                        Width = byte.MaxValue,
-                        FontSize = 33,
-                        FontFamily = new FontFamily("Book Antiqua"),
-                        Style = Resources["X"] as Style
-                    };
-                    button.Click += new RoutedEventHandler(Button_Click1);
-                    _finalText = new TextBox
-                    {
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        Height = 59,
-                        Margin = new Thickness(50, 27, 0, 0),
-                        TextWrapping = TextWrapping.Wrap,
-                        VerticalAlignment = VerticalAlignment.Top,
-                        Width = 655,
-                        TextAlignment = TextAlignment.Center,
-                        VerticalContentAlignment = VerticalAlignment.Center,
-                        FontSize = 33,
-                        FontFamily = new FontFamily("Book Antiqua"),
-                        Background = Brushes.AntiqueWhite
-                    };
-                    layoutGrid.Children.Add(button);
-                    layoutGrid.Children.Add(slider);
-                    layoutGrid.Children.Add(_finalText);
-                    slider.Value = 20;
-                    _round = "ФИНАЛ";
                 }
             }
             catch (Exception ex)
@@ -509,18 +433,6 @@ namespace NEW_UM
                 MessageBox.Show(ex.Message);
             }
         }
-
-        /*private void UpdateRoundData(string[] lines, int startIndex)
-        {
-            string[] roundData = lines.Skip(startIndex).Take(6).ToArray();
-
-            first.Text = roundData[0];
-            second.Text = roundData[1];
-            third.Text = roundData[2];
-            fourth.Text = roundData[3];
-            fifth.Text = roundData[4];
-            sixth.Text = roundData[5];
-        }*/
 
         private void Button_Click1(object sender, RoutedEventArgs e)
         {
