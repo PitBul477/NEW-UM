@@ -12,7 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Path = System.IO.Path;
+//using Path = System.IO.Path;
 
 namespace NEW_UM
 {
@@ -33,17 +33,20 @@ namespace NEW_UM
         private Slider slider;
         private readonly TextBox[] _counterTexts = new TextBox[6];
         private TextBox _finalText;
-        //Path = System.IO.Path;
         private Socket _socket;
+        private Settings settings;
+        private int setting1;
 
         public MainWindow()
         {
             InitializeComponent();
+            settings = Settings.Instance;
+            setting1 = settings.Setting1 = 1000; //ИСПРАВИТЬ
             Internet.Checked += InternetEnable;
             Internet.Unchecked += InternetDisable;
             _timer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(1000) // в будущем будет возможность изменить время
+                Interval = TimeSpan.FromMilliseconds(settings.Setting1) // в будущем будет возможность изменить время
             };
             _timer.Tick += (sender, e) => TimerTick();
             try
@@ -134,7 +137,7 @@ namespace NEW_UM
             topic4.Text = streamReader.ReadLine();
             topic5.Text = streamReader.ReadLine();
             topic6.Text = streamReader.ReadLine();
-        }        
+        }
 
         private void TimerTick()
         {
@@ -205,10 +208,9 @@ namespace NEW_UM
                 MessageBox.Show("Строка не определена");
                 return;
             }
-
+            //MessageBox.Show(_timer.Interval.ToString());
             MusicPlay(textBox.Text, name.Substring(3, 1));
         }
-
 
         private void MusicPlay(string I, string No)
         {
@@ -238,7 +240,6 @@ namespace NEW_UM
             _timer.Start();
             PrigressBarAdd();
         }
-
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
@@ -333,6 +334,7 @@ namespace NEW_UM
                 TextAlignment = TextAlignment.Center,
                 VerticalContentAlignment = VerticalAlignment.Center,
                 FontSize = 33,
+                IsReadOnly = true,
                 FontFamily = new FontFamily("Book Antiqua"),
                 Background = Brushes.AntiqueWhite
             };
@@ -442,6 +444,13 @@ namespace NEW_UM
             _timer.Start();
         }
 
+        private void ShowSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var settingsWindow = new SettingsWindow(this);
+            settingsWindow.ShowDialog();
+        }
+
+
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             try
@@ -453,6 +462,18 @@ namespace NEW_UM
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        public void SetSetting(int set1)
+        {
+            if(_round=="1 РАУНД")
+                _timer.Interval = TimeSpan.FromMilliseconds(set1);
+        }
+
+        public int GetSetting()
+        {
+            int milliseconds = (int)_timer.Interval.TotalMilliseconds;
+            return milliseconds;
         }
 
         private void PrigressBarAdd() => ++progress.Value;

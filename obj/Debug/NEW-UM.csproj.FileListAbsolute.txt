@@ -13,3 +13,10 @@ C:\Users\tpa.admin\source\repos\NEW-UM\bin\Debug\NEW-UM.exe
 C:\Users\tpa.admin\source\repos\NEW-UM\bin\Debug\NEW-UM.pdb
 C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\NEW-UM.exe
 C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\NEW-UM.pdb
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\NEW-UM_MarkupCompile.lref
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\SettingsWindow.g.cs
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\SettingsWindow.baml
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Debug\NEW-UM.exe.manifest
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Debug\NEW-UM.application
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\NEW-UM.exe.manifest
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Debug\NEW-UM.application

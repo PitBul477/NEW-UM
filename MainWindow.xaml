@@ -60,13 +60,18 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
+		<Style x:Key="Settings" TargetType="Button">
+			<Setter Property="Content" Value="Настройки"/>
+			<Setter Property="Background" Value="#00911e42"/>			
+		</Style>
+
 	</Window.Resources>
 	<Grid x:Name="layoutGrid" Background="#FFAA1741">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="0"/>
 			<ColumnDefinition Width="234"/>
 			<ColumnDefinition Width="529"/>
-		</Grid.ColumnDefinitions>
+		</Grid.ColumnDefinitions>		
 		<ProgressBar x:Name="pgpoint" HorizontalAlignment="Left" Height="22" Margin="107,15,0,0" VerticalAlignment="Top"
                  Width="120" Grid.Column="2"/>
 		<TextBlock x:Name="points" HorizontalAlignment="Left" TextAlignment="Center" Height="22" Margin="106,15,0,0"
@@ -191,5 +196,8 @@
 		<Button Click="Button_Click" x:Name="bt68" Content="8" HorizontalAlignment="Left" Margin="436,285,0,0"
             VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<CheckBox x:Name="Internet" Content="Интернет" HorizontalAlignment="Left" Margin="215,18,0,0" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
+		<!--Button Click="ShowSettingsButton_Click" Style="{StaticResource Settings}" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="60" Height="20" Margin="4,15,0,0" Grid.Column="1"-->
+			<!--Image Source="/settings.png" Stretch="UniformToFill" /-->
+		<!--/Button-->
 	</Grid>
 </Window>
