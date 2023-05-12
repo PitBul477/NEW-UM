@@ -22,7 +22,9 @@ namespace NEW_UM
         private readonly string path = "../Программа.txt";
         private string _round = string.Empty;
         private string _answer = string.Empty;
-        private string _final = string.Empty;
+        private string[] _final;
+        private int _finalcount = 1;
+        private int _finalcount2 = 1;
         private readonly MediaPlayer player = new MediaPlayer();
         private int _player;
         private int _ipoints;
@@ -30,23 +32,27 @@ namespace NEW_UM
         private int _icounter;
         private readonly DispatcherTimer _timer;
         private Button button;
+        private Button button1;
         private Slider slider;
         private readonly TextBox[] _counterTexts = new TextBox[6];
         private TextBox _finalText;
         private Socket _socket;
         private Settings settings;
-        private int setting1;
+        //private int setting1;
 
         public MainWindow()
         {
             InitializeComponent();
             settings = Settings.Instance;
-            setting1 = settings.Setting1 = 1000; //ИСПРАВИТЬ
-            Internet.Checked += InternetEnable;
-            Internet.Unchecked += InternetDisable;
+            settings.Interval1r = 1000;
+            settings.Interval2r = 200;
+            settings.IPadd = "92.124.142.200";
+            settings.PortsAdd = 12345;
+            //Internet.Checked += InternetEnable;
+            //Internet.Unchecked += InternetDisable;
             _timer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(settings.Setting1) // в будущем будет возможность изменить время
+                Interval = TimeSpan.FromMilliseconds(settings.Interval1r) // в будущем будет возможность изменить время
             };
             _timer.Tick += (sender, e) => TimerTick();
             try
@@ -73,13 +79,13 @@ namespace NEW_UM
             }
         }
 
-        private async void InternetEnable(object sender, RoutedEventArgs e)
+        public async void InternetEnable()//object sender, RoutedEventArgs e)
         {
             try
             {
                 // Создание сокета и установка соединения с сервером
                 _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                await _socket.ConnectAsync("92.124.142.200", 12345);
+                await _socket.ConnectAsync(settings.IPadd, settings.PortsAdd);
                 // Отправка сообщения на сервер
                 byte[] data = Encoding.UTF8.GetBytes($"3|{DateTime.Now:dd.MM.yyyy hh:mm:ss:fff}|{superClientId}");
                 await _socket.SendAsync(new ArraySegment<byte>(data), SocketFlags.None);
@@ -111,7 +117,7 @@ namespace NEW_UM
             }
         }
 
-        private void InternetDisable(object sender, RoutedEventArgs e)
+        public void InternetDisable()//object sender, RoutedEventArgs e)
         {
             if (_socket != null && _socket.Connected)
             {
@@ -234,7 +240,7 @@ namespace NEW_UM
             else if (_round == "2 РАУНД")
             {
                 _ipoints = 0;
-                _timer.Interval = TimeSpan.FromMilliseconds(200);
+                _timer.Interval = TimeSpan.FromMilliseconds(settings.Interval2r);
                 points.Text = "0";
             }
             _timer.Start();
@@ -265,7 +271,7 @@ namespace NEW_UM
             }
             if (e.Key != Key.F || !(_round == "ФИНАЛ") || _player != 0)
                 return;
-            _finalText.Text = _final;
+            _finalText.Text = _final[_finalcount2-1];
         }
 
         private void Cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -323,6 +329,19 @@ namespace NEW_UM
                 Style = Resources["X"] as Style
             };
             button.Click += new RoutedEventHandler(Button_Click1);
+            button1 = new Button
+            {
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Height = 40,
+                MaxWidth = 40,
+                Margin = new Thickness(0, 0, 0, 0),
+                VerticalAlignment = VerticalAlignment.Bottom,
+                Width = byte.MaxValue,
+                FontSize = 33,
+                FontFamily = new FontFamily("Book Antiqua"),
+                Style = Resources["ArrowButtonStyle"] as Style
+            };
+            button1.Click += new RoutedEventHandler(Button_Click2);
             _finalText = new TextBox
             {
                 HorizontalAlignment = HorizontalAlignment.Left,
@@ -339,6 +358,8 @@ namespace NEW_UM
                 Background = Brushes.AntiqueWhite
             };
             layoutGrid.Children.Add(button);
+            if(_finalcount>1)
+            layoutGrid.Children.Add(button1);
             layoutGrid.Children.Add(slider);
             layoutGrid.Children.Add(_finalText);
             slider.Value = 20;
@@ -364,7 +385,24 @@ namespace NEW_UM
                         switch (str)
                         {
                             case "ФИНАЛ":
-                                _final = streamReader.ReadLine();
+                                // Получаем текущую позицию чтения
+                                long currentPosition = streamReader.BaseStream.Position;
+                                // Считываем оставшиеся строки в файле
+                                string remainingText = streamReader.ReadToEnd();
+                                // Разбиваем текст на отдельные строки
+                                string[] remainingLinesArray = remainingText.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                                // Записываем первую строку после слова "ФИНАЛ", если она есть
+                                if (remainingLinesArray.Length > 0)
+                                {
+                                    _finalcount = remainingLinesArray.Length;
+                                    _final = new string[remainingLinesArray.Length];
+                                    for (int i = 0; i < remainingLinesArray.Length; i++)
+                                    {
+                                        _final[i] = remainingLinesArray[i];
+                                    }
+                                }
+                                // Выводим результат
+                                //MessageBox.Show("Осталось строк после ФИНАЛ: " + remainingLinesArray.Length);
                                 break;
                             case var s when s == roundName:
                                 imageback.Source = new BitmapImage(new Uri(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), imagePath)));
@@ -438,15 +476,42 @@ namespace NEW_UM
 
         private void Button_Click1(object sender, RoutedEventArgs e)
         {
-            player.Open(new Uri("../final.mp3", UriKind.RelativeOrAbsolute));
-            player.Play();
-            _player = 1;
-            _timer.Start();
+            //MessageBox.Show($"{_finalcount} > 0 && {_finalcount} < {_finalcount2}");
+            if (_finalcount > 0)
+            {
+                player.Open(new Uri($"../final{_finalcount2}.mp3", UriKind.RelativeOrAbsolute));
+                player.Play();
+                _player = 1;
+                _timer.Start();
+            }
+            else
+            { 
+                MessageBox.Show("Песен для финала нет");
+                layoutGrid.Children.Clear();
+            }
         }
 
-        private void ShowSettingsButton_Click(object sender, RoutedEventArgs e)
+        private void Button_Click2(object sender, RoutedEventArgs e)
         {
-            var settingsWindow = new SettingsWindow(this);
+            /*player.Open(new Uri("../final.mp3", UriKind.RelativeOrAbsolute));
+            player.Play();
+            _player = 1;
+            _timer.Start();*/
+            _finalcount2++;
+            player.Stop();            
+            _finalText.Clear();
+            slider.Value = 20;
+            if (_finalcount == _finalcount2)
+            {
+                //MessageBox.Show("Песен больше нет");
+                layoutGrid.Children.Remove(button1);
+            }
+            _player = 0;
+        }
+
+            private void ShowSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var settingsWindow = new SettingsWindow(this, settings);
             settingsWindow.ShowDialog();
         }
 
@@ -464,10 +529,18 @@ namespace NEW_UM
             }
         }
 
-        public void SetSetting(int set1)
+        //public void SetSetting(int set1)
+        //{
+        //    if(_round=="1 РАУНД")
+        //        _timer.Interval = TimeSpan.FromMilliseconds(set1);
+        //}
+
+        public void SetSetting()
         {
             if(_round=="1 РАУНД")
-                _timer.Interval = TimeSpan.FromMilliseconds(set1);
+                _timer.Interval = TimeSpan.FromMilliseconds(settings.Interval1r);
+            if(_round=="2 РАУНД")
+                _timer.Interval = TimeSpan.FromMilliseconds(settings.Interval2r);
         }
 
         public int GetSetting()

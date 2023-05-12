@@ -10,7 +10,6 @@ C:\Users\tpa.admin\source\repos\NEW-UM\obj\Release\SettingsWindow.g.cs
 C:\Users\tpa.admin\source\repos\NEW-UM\obj\Release\MainWindow.g.cs
 C:\Users\tpa.admin\source\repos\NEW-UM\obj\Release\App.g.cs
 C:\Users\tpa.admin\source\repos\NEW-UM\obj\Release\NEW-UM_MarkupCompile.cache
-C:\Users\tpa.admin\source\repos\NEW-UM\obj\Release\NEW-UM_MarkupCompile.lref
 C:\Users\tpa.admin\source\repos\NEW-UM\obj\Release\SettingsWindow.baml
 C:\Users\tpa.admin\source\repos\NEW-UM\obj\Release\NEW-UM.g.resources
 C:\Users\tpa.admin\source\repos\NEW-UM\obj\Release\NEW_UM.Properties.Resources.resources
@@ -20,3 +19,14 @@ C:\Users\tpa.admin\source\repos\NEW-UM\obj\Release\NEW-UM.exe.manifest
 C:\Users\tpa.admin\source\repos\NEW-UM\obj\Release\NEW-UM.application
 C:\Users\tpa.admin\source\repos\NEW-UM\obj\Release\NEW-UM.exe
 C:\Users\tpa.admin\source\repos\NEW-UM\obj\Release\NEW-UM.pdb
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Release\ControlzEx.dll
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Release\MahApps.Metro.dll
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Release\Microsoft.Xaml.Behaviors.dll
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Release\ControlzEx.pdb
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Release\ControlzEx.xml
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Release\MahApps.Metro.pdb
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Release\MahApps.Metro.xml
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Release\Microsoft.Xaml.Behaviors.pdb
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Release\Microsoft.Xaml.Behaviors.xml
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Release\de\MahApps.Metro.resources.dll
+C:\Users\tpa.admin\source\repos\NEW-UM\obj\Release\NEW-UM.csproj.CopyComplete

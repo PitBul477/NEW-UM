@@ -60,9 +60,22 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
+		<Style x:Key="ArrowButtonStyle" TargetType="{x:Type Button}">
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Button}">
+						<Grid>
+							<Rectangle Fill="AliceBlue" Margin="2,2,2,2" RadiusX="5" RadiusY="5"/>
+							<Polygon Points="16,12 4,24 4,20 12,12 4,4 4,0" Fill="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0"/>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
 		<Style x:Key="Settings" TargetType="Button">
 			<Setter Property="Content" Value="Настройки"/>
-			<Setter Property="Background" Value="#00911e42"/>			
+			<Setter Property="Background" Value="#00911e42"/>
 		</Style>
 
 	</Window.Resources>
@@ -71,7 +84,7 @@
 			<ColumnDefinition Width="0"/>
 			<ColumnDefinition Width="234"/>
 			<ColumnDefinition Width="529"/>
-		</Grid.ColumnDefinitions>		
+		</Grid.ColumnDefinitions>
 		<ProgressBar x:Name="pgpoint" HorizontalAlignment="Left" Height="22" Margin="107,15,0,0" VerticalAlignment="Top"
                  Width="120" Grid.Column="2"/>
 		<TextBlock x:Name="points" HorizontalAlignment="Left" TextAlignment="Center" Height="22" Margin="106,15,0,0"
@@ -195,9 +208,10 @@
             VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
 		<Button Click="Button_Click" x:Name="bt68" Content="8" HorizontalAlignment="Left" Margin="436,285,0,0"
             VerticalAlignment="Top" Width="30" Height="40" Grid.Column="2"/>
-		<CheckBox x:Name="Internet" Content="Интернет" HorizontalAlignment="Left" Margin="215,18,0,0" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
-		<!--Button Click="ShowSettingsButton_Click" Style="{StaticResource Settings}" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="60" Height="20" Margin="4,15,0,0" Grid.Column="1"-->
+		<!--CheckBox x:Name="Internet" Content="Интернет" HorizontalAlignment="Left" Margin="215,18,0,0" VerticalAlignment="Top" Grid.ColumnSpan="3"/-->
+		<Button Click="ShowSettingsButton_Click" Style="{StaticResource X}" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="79" Height="26" Margin="206,13,0,0" Grid.Column="1" Grid.ColumnSpan="2">
 			<!--Image Source="/settings.png" Stretch="UniformToFill" /-->
-		<!--/Button-->
+			<ContentPresenter Content="Настройки" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-3,-3,0,0"/>
+		</Button>
 	</Grid>
 </Window>

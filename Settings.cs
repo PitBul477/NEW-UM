@@ -11,8 +11,11 @@ namespace NEW_UM
         private static Settings instance;
         public static Settings Instance => instance ?? (instance = new Settings());
 
-        public int Setting1 { get; set; }
-        public string Setting2 { get; set; }
+        public int Interval1r { get; set; }
+        public int Interval2r { get; set; }
+        //public int CountFinal { get; set; }
+        public string IPadd { get; set; }
+        public int PortsAdd { get; set; }
 
         private Settings() { }
     }
