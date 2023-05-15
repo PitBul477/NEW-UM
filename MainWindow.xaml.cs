@@ -1,10 +1,9 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
-using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -37,23 +36,14 @@ namespace NEW_UM
         private readonly TextBox[] _counterTexts = new TextBox[6];
         private TextBox _finalText;
         private Socket _socket;
-        private Settings settings;
-        //private int setting1;
 
         public MainWindow()
         {
             InitializeComponent();
-            settings = Settings.Instance;
-            settings.Interval1r = 1000;
-            settings.Interval2r = 200;
-            settings.IPadd = "92.124.142.200";
-            settings.PortsAdd = 12345;
-            //Internet.Checked += InternetEnable;
-            //Internet.Unchecked += InternetDisable;
             _timer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(settings.Interval1r) // в будущем будет возможность изменить время
-            };
+                Interval = TimeSpan.FromMilliseconds(int.Parse(ConfigurationManager.AppSettings["Interval1r"])) // в будущем будет возможность изменить время
+        };
             _timer.Tick += (sender, e) => TimerTick();
             try
             {
@@ -85,7 +75,7 @@ namespace NEW_UM
             {
                 // Создание сокета и установка соединения с сервером
                 _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                await _socket.ConnectAsync(settings.IPadd, settings.PortsAdd);
+                await _socket.ConnectAsync(ConfigurationManager.AppSettings["IP"], int.Parse(ConfigurationManager.AppSettings["Ports"]));
                 // Отправка сообщения на сервер
                 byte[] data = Encoding.UTF8.GetBytes($"3|{DateTime.Now:dd.MM.yyyy hh:mm:ss:fff}|{superClientId}");
                 await _socket.SendAsync(new ArraySegment<byte>(data), SocketFlags.None);
@@ -240,7 +230,7 @@ namespace NEW_UM
             else if (_round == "2 РАУНД")
             {
                 _ipoints = 0;
-                _timer.Interval = TimeSpan.FromMilliseconds(settings.Interval2r);
+                _timer.Interval = TimeSpan.FromMilliseconds(int.Parse(ConfigurationManager.AppSettings["Interval2r"]));
                 points.Text = "0";
             }
             _timer.Start();
@@ -493,10 +483,6 @@ namespace NEW_UM
 
         private void Button_Click2(object sender, RoutedEventArgs e)
         {
-            /*player.Open(new Uri("../final.mp3", UriKind.RelativeOrAbsolute));
-            player.Play();
-            _player = 1;
-            _timer.Start();*/
             _finalcount2++;
             player.Stop();            
             _finalText.Clear();
@@ -511,7 +497,7 @@ namespace NEW_UM
 
             private void ShowSettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            var settingsWindow = new SettingsWindow(this, settings);
+            var settingsWindow = new SettingsWindow(this);
             settingsWindow.ShowDialog();
         }
 
@@ -528,27 +514,20 @@ namespace NEW_UM
                 MessageBox.Show(ex.Message);
             }
         }
-
-        //public void SetSetting(int set1)
-        //{
-        //    if(_round=="1 РАУНД")
-        //        _timer.Interval = TimeSpan.FromMilliseconds(set1);
-        //}
-
         public void SetSetting()
         {
             if(_round=="1 РАУНД")
-                _timer.Interval = TimeSpan.FromMilliseconds(settings.Interval1r);
-            if(_round=="2 РАУНД")
-                _timer.Interval = TimeSpan.FromMilliseconds(settings.Interval2r);
+                _timer.Interval = TimeSpan.FromMilliseconds(int.Parse(ConfigurationManager.AppSettings["Interval1r"]));
+            if (_round=="2 РАУНД")
+                _timer.Interval = TimeSpan.FromMilliseconds(int.Parse(ConfigurationManager.AppSettings["Interval2r"]));
         }
-
+        /*
         public int GetSetting()
         {
             int milliseconds = (int)_timer.Interval.TotalMilliseconds;
             return milliseconds;
         }
-
+        */
         private void PrigressBarAdd() => ++progress.Value;
     }
 }

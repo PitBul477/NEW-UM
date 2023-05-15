@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		mc:Ignorable="d"
-        Title="A" Height="450" Width="440">
+        Title="Настройки" Height="450" Width="440" Icon="/Resources/settings.png" ResizeMode="NoResize">
 	<Grid>
 		<CheckBox x:Name="Internet" Content="Интернет" HorizontalAlignment="Left" Margin="29,24,0,0" VerticalAlignment="Top"/>
 		<Button Click="Button_Click" Content="Применить" HorizontalAlignment="Left" Margin="23,0,0,0" VerticalAlignment="Center" Width="148"/>
@@ -15,7 +15,7 @@
 		<Button Click="Button_Click_1" Content="Отменить" HorizontalAlignment="Left" Margin="181,0,0,0" VerticalAlignment="Center"/>
 		<Label Content="Интервал первого раунда:" HorizontalAlignment="Left" Margin="23,111,0,0" VerticalAlignment="Top"/>
 		<Label Content="Интервал второго раунда:" HorizontalAlignment="Left" Margin="23,140,0,0" VerticalAlignment="Top"/>
-		<TextBlock x:Name="info" HorizontalAlignment="Left" Height="200" Margin="261,17,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161">
+		<TextBlock x:Name="info" HorizontalAlignment="Left" Height="210" Margin="261,17,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161">
 		</TextBlock>
 		<TextBox x:Name="setIP" HorizontalAlignment="Left" Margin="29,67,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="134"/>
 		<TextBox x:Name="setPort" HorizontalAlignment="Left" Margin="179,67,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60"
@@ -23,7 +23,16 @@
 		<Label Content="Формат: xxx.xxx.xxx.xxx : xxxxx" FontSize="14" HorizontalAlignment="Left" Margin="17,40,0,0" VerticalAlignment="Top" Width="200"/>
 		<Label Content="Адрес по-умолчанию: 92.124.142.200:12345" FontSize="10" HorizontalAlignment="Left" Margin="27,81,0,0" VerticalAlignment="Top" Width="213" Foreground="#FF797373"/>
 		<Label Content=":" FontSize="14" HorizontalAlignment="Left" Margin="164,59,0,0" VerticalAlignment="Top" Width="14" Height="29"/>
-		<!--TextBox Text="{Binding Setting1}" />
-		<TextBox Text="{Binding Setting2}" /-->
+		<GroupBox HorizontalAlignment="Center" Height="176" Header="Настройка клавиш" Margin="0,232,0,0" VerticalAlignment="Top" Width="420">
+			<Label FontSize="37" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="386" Height="157" Margin="0,-20,0,0" >
+				<TextBlock TextAlignment="Center" Foreground="DarkGray" Height="152">
+					<Run Text="Заглушка для"/>
+					<LineBreak/>
+					<Run Text="будущего"/>
+					<LineBreak/>
+					<Run Text="функционала"/>
+				</TextBlock>
+			</Label>
+		</GroupBox>
 	</Grid>
 </Window>
