@@ -4,26 +4,26 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		mc:Ignorable="d"
-        Title="Настройки" Height="450" Width="440" Icon="/Resources/settings.png" ResizeMode="NoResize">
+        Title="Настройки" Height="450" Width="431" Icon="/Resources/settings.png" ResizeMode="NoResize">
 	<Grid>
-		<CheckBox x:Name="Internet" Content="Интернет" HorizontalAlignment="Left" Margin="29,24,0,0" VerticalAlignment="Top"/>
-		<Button Click="Button_Click" Content="Применить" HorizontalAlignment="Left" Margin="23,0,0,0" VerticalAlignment="Center" Width="148"/>
-		<TextBox x:Name="set1r" HorizontalAlignment="Left" Margin="179,116,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60"
+		<CheckBox x:Name="Internet" Content="Интернет" HorizontalAlignment="Left" Margin="29,12,0,0" VerticalAlignment="Top"/>
+		<Button Click="Button_Click" Content="Применить" HorizontalAlignment="Left" Margin="27,212,0,0" VerticalAlignment="Top" Width="143"/>
+		<TextBox x:Name="set1r" HorizontalAlignment="Left" Margin="179,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60"
          PreviewTextInput="TextBox_PreviewTextInput"/>
-		<TextBox x:Name="set2r" HorizontalAlignment="Left" Margin="179,145,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60"
+		<TextBox x:Name="set2r" HorizontalAlignment="Left" Margin="179,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60"
 		 PreviewTextInput="TextBox_PreviewTextInput"/>
-		<Button Click="Button_Click_1" Content="Отменить" HorizontalAlignment="Left" Margin="181,0,0,0" VerticalAlignment="Center"/>
-		<Label Content="Интервал первого раунда:" HorizontalAlignment="Left" Margin="23,111,0,0" VerticalAlignment="Top"/>
-		<Label Content="Интервал второго раунда:" HorizontalAlignment="Left" Margin="23,140,0,0" VerticalAlignment="Top"/>
-		<TextBlock x:Name="info" HorizontalAlignment="Left" Height="210" Margin="261,17,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161">
+		<Button Click="Button_Click_1" Content="Отменить" HorizontalAlignment="Left" Margin="180,212,0,0" VerticalAlignment="Top"/>
+		<Label Content="Интервал первого раунда:" HorizontalAlignment="Left" Margin="23,91,0,0" VerticalAlignment="Top"/>
+		<Label Content="Интервал второго раунда:" HorizontalAlignment="Left" Margin="23,120,0,0" VerticalAlignment="Top"/>
+		<TextBlock x:Name="info" HorizontalAlignment="Left" Height="210" Margin="261,17,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="159">
 		</TextBlock>
-		<TextBox x:Name="setIP" HorizontalAlignment="Left" Margin="29,67,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="134"/>
-		<TextBox x:Name="setPort" HorizontalAlignment="Left" Margin="179,67,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60"
+		<TextBox x:Name="setIP" HorizontalAlignment="Left" Margin="29,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="134"/>
+		<TextBox x:Name="setPort" HorizontalAlignment="Left" Margin="179,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60"
 	  PreviewTextInput="TextBox_PreviewTextInput"/>
-		<Label Content="Формат: xxx.xxx.xxx.xxx : xxxxx" FontSize="14" HorizontalAlignment="Left" Margin="17,40,0,0" VerticalAlignment="Top" Width="200"/>
-		<Label Content="Адрес по-умолчанию: 92.124.142.200:12345" FontSize="10" HorizontalAlignment="Left" Margin="27,81,0,0" VerticalAlignment="Top" Width="213" Foreground="#FF797373"/>
-		<Label Content=":" FontSize="14" HorizontalAlignment="Left" Margin="164,59,0,0" VerticalAlignment="Top" Width="14" Height="29"/>
-		<GroupBox HorizontalAlignment="Center" Height="176" Header="Настройка клавиш" Margin="0,232,0,0" VerticalAlignment="Top" Width="420">
+		<Label Content="Формат: xxx.xxx.xxx.xxx : xxxxx" FontSize="13" HorizontalAlignment="Left" Margin="28,29,0,0" VerticalAlignment="Top" Width="200"/>
+		<Label Content="Адрес по-умолчанию: 92.124.142.200:12345" FontSize="10" HorizontalAlignment="Left" Margin="27,69,0,0" VerticalAlignment="Top" Width="213" Foreground="#FF797373"/>
+		<Label Content=":" FontSize="14" HorizontalAlignment="Left" Margin="164,47,0,0" VerticalAlignment="Top" Width="14" Height="29"/>
+		<GroupBox HorizontalAlignment="Center" Height="176" Header="Настройка клавиш" Margin="0,232,0,0" VerticalAlignment="Top" Width="410">
 			<Label FontSize="37" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="386" Height="157" Margin="0,-20,0,0" >
 				<TextBlock TextAlignment="Center" Foreground="DarkGray" Height="152">
 					<Run Text="Заглушка для"/>
@@ -34,5 +34,11 @@
 				</TextBlock>
 			</Label>
 		</GroupBox>
+		<CheckBox x:Name="delay2r" Content="Задержка ответа 2 раунда" HorizontalAlignment="Left" Margin="29,164,0,0" VerticalAlignment="Top"/>
+		<TextBox x:Name="set2r_delay" HorizontalAlignment="Left" Margin="179,183,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60"
+	  PreviewTextInput="TextBox_PreviewTextInput"/>
+		<Label Content="Сколько баллов задержки:" HorizontalAlignment="Left" Margin="23,179,0,0" VerticalAlignment="Top"/>
+		<Label Content="Всё время указано в миллисекундах. 1сек = 1000мсек" FontSize="9" HorizontalAlignment="Left" Margin="12,142,0,0" VerticalAlignment="Top" Foreground="#FF797373"/>
+		<CheckBox x:Name="ResizeCheck" Content="Изменение размера" HorizontalAlignment="Left" Margin="109,12,0,0" VerticalAlignment="Top"/>
 	</Grid>
 </Window>

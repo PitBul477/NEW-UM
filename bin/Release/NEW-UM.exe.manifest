@@ -91,24 +91,36 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="NEW-UM.exe" size="118720">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="NEW-UM.exe" size="120256">
       <assemblyIdentity name="NEW-UM" version="3.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>+rWtSNxBrDGEWAvk0DNGACjcbK/IVgO5Ekq2hEUkA6o=</dsig:DigestValue>
+        <dsig:DigestValue>uMLcdj61hRFyISm8k87SIQqhYtL4/UlSbLeobauMm5Q=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="NEW-UM.exe.config" size="187">
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WPFtoolkitFramework.dll" size="2780160">
+      <assemblyIdentity name="WPFtoolkitFramework" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>uS/o1KXwZEkjxE0bRngyyOTnO8zfXAeAyFGgWZp6SM4=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="NEW-UM.exe.config" size="424">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>+CM46OnHRrXZXNLMx7+U3V3iubiYL//d8hGOR13lDhU=</dsig:DigestValue>
+      <dsig:DigestValue>iiZV/F9egKcyVYyRBC1Ey4rok7vIiPfXs2d85xhv4P0=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Resources\Иконка.ico" size="13325">

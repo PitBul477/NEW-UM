@@ -30,3 +30,4 @@ C:\Users\tpa.admin\source\repos\NEW-UM\bin\Release\Microsoft.Xaml.Behaviors.pdb
 C:\Users\tpa.admin\source\repos\NEW-UM\bin\Release\Microsoft.Xaml.Behaviors.xml
 C:\Users\tpa.admin\source\repos\NEW-UM\bin\Release\de\MahApps.Metro.resources.dll
 C:\Users\tpa.admin\source\repos\NEW-UM\obj\Release\NEW-UM.csproj.CopyComplete
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Release\WPFtoolkitFramework.dll

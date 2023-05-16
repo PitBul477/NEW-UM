@@ -36,6 +36,7 @@ namespace NEW_UM
         private readonly TextBox[] _counterTexts = new TextBox[6];
         private TextBox _finalText;
         private Socket _socket;
+        private int _delay = 0;
 
         public MainWindow()
         {
@@ -91,10 +92,15 @@ namespace NEW_UM
                         string[] parts = message.Split(':');
                         if (_player == 1 && _round != "ФИНАЛ")
                         {
-                            player.Pause();
-                            _timer.Stop();
-                            _player = 0;
-                            MessageBox.Show($"Отвечает: {parts[6]}");
+                            if (_round == "2 РАУНД" && _ipoints < _delay)
+                                continue;
+                            else
+                            {
+                                player.Pause();
+                                _timer.Stop();
+                                _player = 0;
+                                MessageBox.Show($"Отвечает: {parts[6]}");
+                            }
                         }
                     }
                     else
@@ -123,6 +129,11 @@ namespace NEW_UM
                     MessageBox.Show($"Ошибка отключения: {ex.Message}");
                 }
             }
+        }
+
+        public void SetDelay(int delay)
+        {
+            _delay = delay;
         }
 
         void ReadRound(StreamReader streamReader)
@@ -266,6 +277,8 @@ namespace NEW_UM
 
         private void Cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            _timer.Stop();
+            player.Stop();
             switch (cb.SelectedIndex)
             {
                 case 0:
@@ -293,13 +306,14 @@ namespace NEW_UM
             SetBackgroundImage("images/Финал.png");
             layoutGrid.Children.Clear();
             layoutGrid.ColumnDefinitions.Clear();
+            vb.Margin = new Thickness(0, -50, 0, -50);
             _timer.Interval = TimeSpan.FromMilliseconds(1000);
             slider = new Slider
             {
                 Maximum = 20,
                 Width = 655,
                 Height = 42,
-                Margin = new Thickness(50, 150, 0, 0),
+                Margin = new Thickness(50, 170, 50, 0),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
                 TickPlacement = TickPlacement.BottomRight,
@@ -311,7 +325,7 @@ namespace NEW_UM
             {
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Height = 80,
-                Margin = new Thickness(250, 230, 0, 0),
+                Margin = new Thickness(250, 230, 0, 88),
                 VerticalAlignment = VerticalAlignment.Top,
                 Width = byte.MaxValue,
                 FontSize = 33,
@@ -336,7 +350,7 @@ namespace NEW_UM
             {
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Height = 59,
-                Margin = new Thickness(50, 27, 0, 0),
+                Margin = new Thickness(50, 40, 0, 0),
                 TextWrapping = TextWrapping.Wrap,
                 VerticalAlignment = VerticalAlignment.Top,
                 Width = 655,
@@ -451,6 +465,7 @@ namespace NEW_UM
                                     _round = "2 РАУНД";
                                     progress.Value = 0;
                                     progress.Maximum = 30;
+                                    pgpoint.Value = 0;
                                 }
                                 else _round = "1 РАУНД";
                                 break;
@@ -484,7 +499,8 @@ namespace NEW_UM
         private void Button_Click2(object sender, RoutedEventArgs e)
         {
             _finalcount2++;
-            player.Stop();            
+            player.Pause();
+            _timer.Stop();
             _finalText.Clear();
             slider.Value = 20;
             if (_finalcount == _finalcount2)
@@ -521,13 +537,6 @@ namespace NEW_UM
             if (_round=="2 РАУНД")
                 _timer.Interval = TimeSpan.FromMilliseconds(int.Parse(ConfigurationManager.AppSettings["Interval2r"]));
         }
-        /*
-        public int GetSetting()
-        {
-            int milliseconds = (int)_timer.Interval.TotalMilliseconds;
-            return milliseconds;
-        }
-        */
         private void PrigressBarAdd() => ++progress.Value;
     }
 }
