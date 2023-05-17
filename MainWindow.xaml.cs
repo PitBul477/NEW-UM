@@ -37,6 +37,7 @@ namespace NEW_UM
         private TextBox _finalText;
         private Socket _socket;
         private int _delay = 0;
+        private int _maxpoint2r = 200;
 
         public MainWindow()
         {
@@ -165,7 +166,7 @@ namespace NEW_UM
                     }
                     break;
                 case "2 РАУНД":
-                    if (_ipoints < 200)
+                    if (_ipoints < _maxpoint2r)
                     {
                         ++_ipoints;
                         pgpoint.Value = _ipoints;
@@ -204,6 +205,8 @@ namespace NEW_UM
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            Button button = (Button)sender;
+            button.Focusable = false;
             if (!(e.OriginalSource is FrameworkElement source)) return;
             var name = source.Name;
             source.IsEnabled = false;
@@ -417,7 +420,8 @@ namespace NEW_UM
                                 }
                                 if (roundName == "2 РАУНД")
                                 {
-                                    pgpoint.Maximum = 200;
+                                    _maxpoint2r = int.Parse(ConfigurationManager.AppSettings["MaxPoint2r"]);
+                                    pgpoint.Maximum = _maxpoint2r;
                                     // Обратно включить кнопки
                                     Button[] answerButtons = {
                                         bt11, bt12, bt13, bt14, bt15,

@@ -4,15 +4,61 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		mc:Ignorable="d"
-        Title="Настройки" Height="450" Width="431" Icon="/Resources/settings.png" ResizeMode="NoResize">
+        Title="Настройки" Height="478" Width="431" Icon="/Resources/settings.png" ResizeMode="NoResize">
+	<Window.Resources>
+		<Style x:Key="CustomButtonStyle" TargetType="Button">
+			<Setter Property="Background" Value="#FF006400"/>
+			<Setter Property="BorderBrush" Value="Black"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Padding" Value="1"/>
+			<Setter Property="ContentTemplate">
+				<Setter.Value>
+					<DataTemplate>
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="Auto"/>
+								<ColumnDefinition Width="3"/>
+								<ColumnDefinition Width="20"/>
+							</Grid.ColumnDefinitions>
+							<TextBlock Text="{Binding}" FontSize="12" Foreground="#fffafa" Grid.Column="0" Margin="0,1.8,0,0">
+								<TextBlock.Effect>
+									<DropShadowEffect Color="Black" BlurRadius="2" ShadowDepth="0" />
+								</TextBlock.Effect>
+							</TextBlock>
+							<Image Source="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}, Path=Tag}" Width="20" Height="20" Stretch="UniformToFill" Grid.Column="2"/>
+						</Grid>
+					</DataTemplate>
+				</Setter.Value>
+			</Setter>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5">
+							<ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Setter Property="Background" Value="#FF7FFF00"/>
+					<Setter Property="Foreground" Value="#000000"/>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+	</Window.Resources>
 	<Grid>
 		<CheckBox x:Name="Internet" Content="Интернет" HorizontalAlignment="Left" Margin="29,12,0,0" VerticalAlignment="Top"/>
-		<Button Click="Button_Click" Content="Применить" HorizontalAlignment="Left" Margin="27,212,0,0" VerticalAlignment="Top" Width="143"/>
+		<Button Click="Button_Click" Content="Применить" HorizontalAlignment="Left" Margin="27,241,0,0" VerticalAlignment="Top" Width="143"/>
 		<TextBox x:Name="set1r" HorizontalAlignment="Left" Margin="179,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60"
          PreviewTextInput="TextBox_PreviewTextInput"/>
 		<TextBox x:Name="set2r" HorizontalAlignment="Left" Margin="179,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60"
 		 PreviewTextInput="TextBox_PreviewTextInput"/>
-		<Button Click="Button_Click_1" Content="Отменить" HorizontalAlignment="Left" Margin="180,212,0,0" VerticalAlignment="Top"/>
+		<Button Click="Button_Click_1" Content="Отменить" HorizontalAlignment="Left" Margin="180,241,0,0" VerticalAlignment="Top"/>
 		<Label Content="Интервал первого раунда:" HorizontalAlignment="Left" Margin="23,91,0,0" VerticalAlignment="Top"/>
 		<Label Content="Интервал второго раунда:" HorizontalAlignment="Left" Margin="23,120,0,0" VerticalAlignment="Top"/>
 		<TextBlock x:Name="info" HorizontalAlignment="Left" Height="210" Margin="261,17,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="159">
@@ -23,22 +69,29 @@
 		<Label Content="Формат: xxx.xxx.xxx.xxx : xxxxx" FontSize="13" HorizontalAlignment="Left" Margin="28,29,0,0" VerticalAlignment="Top" Width="200"/>
 		<Label Content="Адрес по-умолчанию: 92.124.142.200:12345" FontSize="10" HorizontalAlignment="Left" Margin="27,69,0,0" VerticalAlignment="Top" Width="213" Foreground="#FF797373"/>
 		<Label Content=":" FontSize="14" HorizontalAlignment="Left" Margin="164,47,0,0" VerticalAlignment="Top" Width="14" Height="29"/>
-		<GroupBox HorizontalAlignment="Center" Height="176" Header="Настройка клавиш" Margin="0,232,0,0" VerticalAlignment="Top" Width="410">
-			<Label FontSize="37" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="386" Height="157" Margin="0,-20,0,0" >
-				<TextBlock TextAlignment="Center" Foreground="DarkGray" Height="152">
-					<Run Text="Заглушка для"/>
-					<LineBreak/>
-					<Run Text="будущего"/>
-					<LineBreak/>
-					<Run Text="функционала"/>
-				</TextBlock>
-			</Label>
+		<GroupBox HorizontalAlignment="Center" Height="179" Header="Настройка клавиш" Margin="0,260,0,0" VerticalAlignment="Top" Width="410">
+			<Grid>
+				<Button x:Name="stop" Content="Остановка музыки" Click="Click_Set_Button" Height="30" Width="186" Margin="6,10,206,116"  Style="{StaticResource CustomButtonStyle}" Tag="/Resources/stop.png" />
+				<Button x:Name="play" Content="Продолжить проигрывание"  Click="Click_Set_Button"  Height="30" Width="186" Margin="6,45,206,81"  Style="{StaticResource CustomButtonStyle}" Tag="/Resources/play.png" />
+				<Button x:Name="answer" Content="Ответ" Height="30"  Click="Click_Set_Button"  Width="186" Margin="6,81,206,45"  Style="{StaticResource CustomButtonStyle}" Tag="/Resources/answer.png"/>
+				<Button x:Name="final" Content="Вывод ответа в финале"  Click="Click_Set_Button"  Height="30" Width="186" Margin="6,116,206,10"  Style="{StaticResource CustomButtonStyle}" Tag="/Resources/final.png"/>
+				<Label x:Name="ButtonLabel" Foreground="Gray" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="{Binding PressedKeys}" Height="60" Margin="271,10,6,86" Visibility="Visible"/>
+				<Label x:Name="stop_btn" Foreground="Gray" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="197,10,132,116" Visibility="Visible"/>
+				<Button Content="Применить" Click="Button_Click_Apply_btn" Height="30" Margin="271,81,6,45"/>
+				<Button Content="По-умолчанию" Click="Button_Click_Default_btn" Height="30" Margin="271,116,6,10"/>
+				<Label x:Name="play_btn" Foreground="Gray" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="197,45,132,81" Visibility="Visible"/>
+				<Label x:Name="answer_btn" Foreground="Gray" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="197,81,132,45" Visibility="Visible"/>
+				<Label x:Name="final_btn" Foreground="Gray" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="197,116,132,10" Visibility="Visible"/>
+			</Grid>
 		</GroupBox>
-		<CheckBox x:Name="delay2r" Content="Задержка ответа 2 раунда" HorizontalAlignment="Left" Margin="29,164,0,0" VerticalAlignment="Top"/>
-		<TextBox x:Name="set2r_delay" HorizontalAlignment="Left" Margin="179,183,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60"
+		<CheckBox x:Name="delay2r" Content="Задержка ответа 2 раунда" HorizontalAlignment="Left" Margin="29,192,0,0" VerticalAlignment="Top"/>
+		<TextBox x:Name="set2r_delay" HorizontalAlignment="Left" Margin="179,211,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60"
 	  PreviewTextInput="TextBox_PreviewTextInput"/>
-		<Label Content="Сколько баллов задержки:" HorizontalAlignment="Left" Margin="23,179,0,0" VerticalAlignment="Top"/>
+		<Label Content="Сколько баллов задержки:" HorizontalAlignment="Left" Margin="23,207,0,0" VerticalAlignment="Top"/>
 		<Label Content="Всё время указано в миллисекундах. 1сек = 1000мсек" FontSize="9" HorizontalAlignment="Left" Margin="12,142,0,0" VerticalAlignment="Top" Foreground="#FF797373"/>
 		<CheckBox x:Name="ResizeCheck" Content="Изменение размера" HorizontalAlignment="Left" Margin="109,12,0,0" VerticalAlignment="Top"/>
+		<TextBox x:Name="setpoint2r" HorizontalAlignment="Left" Margin="179,166,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60"
+	  PreviewTextInput="TextBox_PreviewTextInput"/>
+		<Label Content="Баллов за песню 2 раунда:" HorizontalAlignment="Left" Margin="23,161,0,0" VerticalAlignment="Top"/>
 	</Grid>
 </Window>
