@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -38,6 +40,10 @@ namespace NEW_UM
         private Socket _socket;
         private int _delay = 0;
         private int _maxpoint2r = 200;
+        private string[] _buttonStop = ConfigurationManager.AppSettings["BtnStop"]?.Split('+');
+        private string[] _buttonPlay = ConfigurationManager.AppSettings["BtnPlay"]?.Split('+');
+        private string[] _buttonAnswer = ConfigurationManager.AppSettings["BtnAnswer"]?.Split('+');
+        private string[] _buttonFinal = ConfigurationManager.AppSettings["BtnFinal"]?.Split('+');
 
         public MainWindow()
         {
@@ -69,6 +75,14 @@ namespace NEW_UM
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        public void RefreshButton()
+        {
+            _buttonStop = ConfigurationManager.AppSettings["BtnStop"]?.Split('+');
+            _buttonPlay = ConfigurationManager.AppSettings["BtnPlay"]?.Split('+');
+            _buttonAnswer = ConfigurationManager.AppSettings["BtnAnswer"]?.Split('+');
+            _buttonFinal = ConfigurationManager.AppSettings["BtnFinal"]?.Split('+');
         }
 
         public async void InternetEnable()//object sender, RoutedEventArgs e)
@@ -251,7 +265,7 @@ namespace NEW_UM
             PrigressBarAdd();
         }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
+        /*private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.NumPad0 && _player == 1 && _round != "ФИНАЛ")
             {
@@ -276,9 +290,134 @@ namespace NEW_UM
             if (e.Key != Key.F || !(_round == "ФИНАЛ") || _player != 0)
                 return;
             _finalText.Text = _final[_finalcount2-1];
+        }*/
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            // Остановить воспроизведение
+            //string[] keys = ConfigurationManager.AppSettings["BtnStop"]?.Split('+');
+
+            if (_buttonStop != null && _buttonStop.Length > 0)
+            {
+                bool isMatch = true;
+                foreach (string key in _buttonStop)
+                {
+                    Key convertedKey;
+                    if (!Enum.TryParse(key, out convertedKey))
+                    {
+                        // Invalid key in config file, ignore the comparison
+                        isMatch = false;
+                        break;
+                    }
+                    if (!Keyboard.IsKeyDown(convertedKey))
+                    {
+                        isMatch = false;
+                        break;
+                    }
+                }
+                if (isMatch)
+                {
+                    if (_player == 1 && _round != "ФИНАЛ")
+                    {
+                        //MessageBox.Show("a");
+                        player.Pause();
+                        _timer.Stop();
+                        _player = 0;
+                    }
+                }
+            }
+            // Продолжить воспроизведение
+            if (_buttonPlay != null && _buttonPlay.Length > 0)
+            {
+                bool isMatch = true;
+                foreach (string key in _buttonPlay)
+                {
+                    Key convertedKey;
+                    if (!Enum.TryParse(key, out convertedKey))
+                    {
+                        // Invalid key in config file, ignore the comparison
+                        isMatch = false;
+                        break;
+                    }
+                    if (!Keyboard.IsKeyDown(convertedKey))
+                    {
+                        isMatch = false;
+                        break;
+                    }
+                }
+                if (isMatch)
+                {
+                    if (_player == 0 && _round != "ФИНАЛ")
+                    {
+                        player.Play();
+                        _timer.Start();
+                        _player = 1;
+                    }
+                }
+            }
+
+            // Включить ответ
+            if (_buttonAnswer != null && _buttonAnswer.Length > 0)
+            {
+                bool isMatch = true;
+                foreach (string key in _buttonAnswer)
+                {
+                    Key convertedKey;
+                    if (!Enum.TryParse(key, out convertedKey))
+                    {
+                        // Invalid key in config file, ignore the comparison
+                        isMatch = false;
+                        break;
+                    }
+                    if (!Keyboard.IsKeyDown(convertedKey))
+                    {
+                        isMatch = false;
+                        break;
+                    }
+                }
+                if (isMatch)
+                {
+                    if (_answer != "" && _round != "ФИНАЛ")
+                    {
+                        player.Close();
+                        _timer.Stop();
+                        player.Open(new Uri(_answer, UriKind.RelativeOrAbsolute));
+                        player.Play();
+                        _answer = "";
+                    }
+                }
+            }
+            // Ответ финала
+            if (_buttonFinal != null && _buttonFinal.Length > 0)
+            {
+                bool isMatch = true;
+                foreach (string key in _buttonFinal)
+                {
+                    Key convertedKey;
+                    if (!Enum.TryParse(key, out convertedKey))
+                    {
+                        // Invalid key in config file, ignore the comparison
+                        isMatch = false;
+                        break;
+                    }
+                    if (!Keyboard.IsKeyDown(convertedKey))
+                    {
+                        isMatch = false;
+                        break;
+                    }
+                }
+                if (isMatch)
+                {
+                    if (_round == "ФИНАЛ" && _player == 0)
+                    {
+                        _finalText.Text = _final[_finalcount2 - 1];
+                    }
+                }
+            }
         }
 
-        private void Cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+            private void Cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _timer.Stop();
             player.Stop();

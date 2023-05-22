@@ -75,7 +75,7 @@
 				<Button x:Name="play" Content="Продолжить проигрывание"  Click="Click_Set_Button"  Height="30" Width="186" Margin="6,45,206,81"  Style="{StaticResource CustomButtonStyle}" Tag="/Resources/play.png" />
 				<Button x:Name="answer" Content="Ответ" Height="30"  Click="Click_Set_Button"  Width="186" Margin="6,81,206,45"  Style="{StaticResource CustomButtonStyle}" Tag="/Resources/answer.png"/>
 				<Button x:Name="final" Content="Вывод ответа в финале"  Click="Click_Set_Button"  Height="30" Width="186" Margin="6,116,206,10"  Style="{StaticResource CustomButtonStyle}" Tag="/Resources/final.png"/>
-				<Label x:Name="ButtonLabel" Foreground="Gray" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="{Binding PressedKeys}" Height="60" Margin="271,10,6,86" Visibility="Visible"/>
+                <Label x:Name="ButtonLabel" Foreground="Gray" FontSize="16" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="{Binding PressedKeys}" Height="60" Margin="271,10,6,86" Visibility="Visible"/>
 				<Label x:Name="stop_btn" Foreground="Gray" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="197,10,132,116" Visibility="Visible"/>
 				<Button Content="Применить" Click="Button_Click_Apply_btn" Height="30" Margin="271,81,6,45"/>
 				<Button Content="По-умолчанию" Click="Button_Click_Default_btn" Height="30" Margin="271,116,6,10"/>

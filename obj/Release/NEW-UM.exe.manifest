@@ -91,14 +91,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="NEW-UM.exe" size="230336">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="NEW-UM.exe" size="231360">
       <assemblyIdentity name="NEW-UM" version="3.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>uBKR2lRJoQdLAyKz6QlODc7JfcqqAmrP1XXW+LD8cY8=</dsig:DigestValue>
+        <dsig:DigestValue>coRcvsbegeOrh+U1r0D9+bHoCMWToGQ+6IbqHEBmgLE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -120,7 +120,7 @@
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>bwhgH96FSkpYOgM6zbkh5BHgejD+gP1SMPnuC1mUhPM=</dsig:DigestValue>
+      <dsig:DigestValue>vUjGjdNpW5Qps0MgpPewvp2gqyOz30ndP3Y+kVG39ys=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Resources\Иконка.ico" size="13325">

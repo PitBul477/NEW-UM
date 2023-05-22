@@ -188,6 +188,7 @@ namespace NEW_UM
             // вызываем метод Focus(), чтобы кнопка получила фокус
             button.Focus();
         }
+
         private void Button_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             RecordKey(e.Key);
@@ -259,28 +260,28 @@ namespace NEW_UM
         private void Button_Click_Apply_btn(object sender, RoutedEventArgs e)
         {
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            /*var buttonStyle = new Style(typeof(Button));
-            buttonStyle.Setters.Add(new Setter(Button.BackgroundProperty, new SolidColorBrush(Color.FromArgb(255, 0, 100, 0))));
-            var trigger = new Trigger()
-            {
-                Property = UIElement.IsMouseOverProperty,
-                Value = true
-            };
-            trigger.Setters.Add(new Setter(Button.BackgroundProperty, new SolidColorBrush(Color.FromArgb(255, 127, 255, 0))));
-            buttonStyle.Triggers.Add(trigger);*/
-            //ApplyButton.Style = buttonStyle;
             switch (_btn)
             {
                 case 0:
                     break;
                 case 1:
-                    ConfigurationManager.AppSettings["BtnStop"] = ButtonLabel.Content.ToString();
+                    if (ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnPlay"] || ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnAnswer"] || ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnFinal"])
+                    {
+                        ButtonLabel.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                        return;
+                    }
+                        ConfigurationManager.AppSettings["BtnStop"] = ButtonLabel.Content.ToString();
                     config.AppSettings.Settings["BtnStop"].Value = ButtonLabel.Content.ToString();
                     stop_btn.Content = ConfigurationManager.AppSettings["BtnStop"];
                     //stop.Background = new SolidColorBrush(Color.FromArgb(255, 0, 100, 0));
                     stop.Style = (Style)this.FindResource("CustomButtonStyle");
                     break;
                 case 2:
+                    if (ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnStop"] || ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnAnswer"] || ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnFinal"])
+                    {
+                        ButtonLabel.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                        return;
+                    }
                     ConfigurationManager.AppSettings["BtnPlay"] = ButtonLabel.Content.ToString();
                     config.AppSettings.Settings["BtnPlay"].Value = ButtonLabel.Content.ToString();
                     play_btn.Content = ConfigurationManager.AppSettings["BtnPlay"];
@@ -288,6 +289,11 @@ namespace NEW_UM
                     play.Style = (Style)this.FindResource("CustomButtonStyle");
                     break;
                 case 3:
+                    if (ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnStop"] || ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnPlay"] || ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnFinal"])
+                    {
+                        ButtonLabel.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                        return;
+                    }
                     ConfigurationManager.AppSettings["BtnAnswer"] = ButtonLabel.Content.ToString();
                     config.AppSettings.Settings["BtnAnswer"].Value = ButtonLabel.Content.ToString();
                     answer_btn.Content = ConfigurationManager.AppSettings["BtnAnswer"];
@@ -295,6 +301,11 @@ namespace NEW_UM
                     answer.Style = (Style)this.FindResource("CustomButtonStyle");
                     break;
                 case 4:
+                    if (ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnStop"] || ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnPlay"] || ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnAnswer"])
+                    {
+                        ButtonLabel.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                        return;
+                    }
                     ConfigurationManager.AppSettings["BtnFinal"] = ButtonLabel.Content.ToString();
                     config.AppSettings.Settings["BtnFinal"].Value = ButtonLabel.Content.ToString();
                     final_btn.Content = ConfigurationManager.AppSettings["BtnFinal"];
@@ -306,6 +317,7 @@ namespace NEW_UM
             }
             config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
+            mainWindow.RefreshButton();
             ButtonLabel.Visibility = Visibility.Hidden;
             _pressedKeys = string.Empty;
         }
@@ -314,8 +326,8 @@ namespace NEW_UM
         private void Button_Click_Default_btn(object sender, RoutedEventArgs e)
         {
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            ConfigurationManager.AppSettings["BtnStop"] = "NumPad0";
-            config.AppSettings.Settings["BtnStop"].Value = "NumPad0";
+            ConfigurationManager.AppSettings["BtnStop"] = "Decimal";
+            config.AppSettings.Settings["BtnStop"].Value = "Decimal";
             stop_btn.Content = ConfigurationManager.AppSettings["BtnStop"];
             ConfigurationManager.AppSettings["BtnPlay"] = "NumPad0";
             config.AppSettings.Settings["BtnPlay"].Value = "NumPad0";
@@ -328,6 +340,7 @@ namespace NEW_UM
             final_btn.Content = ConfigurationManager.AppSettings["BtnFinal"];
             config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
+            mainWindow.RefreshButton();
             ButtonLabel.Visibility = Visibility.Hidden;
             _pressedKeys = string.Empty;
         }
