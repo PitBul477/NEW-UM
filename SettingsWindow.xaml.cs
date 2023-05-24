@@ -345,6 +345,12 @@ namespace NEW_UM
             _pressedKeys = string.Empty;
         }
 
+        private void Button_Click_Info(object sender, RoutedEventArgs e)
+        {
+            var infoWindow = new Info();
+            infoWindow.ShowDialog();
+        }
+
         void Hyperlink2_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("https://t.me/UgadaiMelody"); //открытие ссылки в браузере

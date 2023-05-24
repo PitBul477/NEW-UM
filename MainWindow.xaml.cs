@@ -303,8 +303,7 @@ namespace NEW_UM
                 bool isMatch = true;
                 foreach (string key in _buttonStop)
                 {
-                    Key convertedKey;
-                    if (!Enum.TryParse(key, out convertedKey))
+                    if (!Enum.TryParse(key, out Key convertedKey))
                     {
                         // Invalid key in config file, ignore the comparison
                         isMatch = false;
@@ -333,8 +332,7 @@ namespace NEW_UM
                 bool isMatch = true;
                 foreach (string key in _buttonPlay)
                 {
-                    Key convertedKey;
-                    if (!Enum.TryParse(key, out convertedKey))
+                    if (!Enum.TryParse(key, out Key convertedKey))
                     {
                         // Invalid key in config file, ignore the comparison
                         isMatch = false;
@@ -363,8 +361,7 @@ namespace NEW_UM
                 bool isMatch = true;
                 foreach (string key in _buttonAnswer)
                 {
-                    Key convertedKey;
-                    if (!Enum.TryParse(key, out convertedKey))
+                    if (!Enum.TryParse(key, out Key convertedKey))
                     {
                         // Invalid key in config file, ignore the comparison
                         isMatch = false;
@@ -394,8 +391,7 @@ namespace NEW_UM
                 bool isMatch = true;
                 foreach (string key in _buttonFinal)
                 {
-                    Key convertedKey;
-                    if (!Enum.TryParse(key, out convertedKey))
+                    if (!Enum.TryParse(key, out Key convertedKey))
                     {
                         // Invalid key in config file, ignore the comparison
                         isMatch = false;

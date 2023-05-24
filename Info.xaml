@@ -1,0 +1,42 @@
+﻿<Window x:Class="NEW_UM.Info"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		mc:Ignorable="d"
+        Title="Info" Height="450" Width="400">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+			<StackPanel Margin="15,5,15,5">
+				<TextBlock x:Name="text" Text="" FontSize="15" TextWrapping="Wrap"/>
+				<Image x:Name="image" HorizontalAlignment="Left" VerticalAlignment="Bottom" Stretch="Fill"/>
+			</StackPanel>
+		</ScrollViewer>
+		<ComboBox x:Name="help" FontSize="15" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" SelectionChanged="ComboBox_Info"  Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="370" SelectedIndex="0">
+			<TextBlock><Run Text="Концепция программы"/></TextBlock>
+			<TextBlock><Run Text="Обязательные компоненты"/></TextBlock>
+			<TextBlock><Run Text="Файл &quot;Программа.txt&quot;"/></TextBlock>
+			<TextBlock><Run Text="Структура папок и файлов"/></TextBlock>
+			<TextBlock><Run Text="Файл &quot;Баллы.txt&quot;"/></TextBlock>
+			<TextBlock><Run Text="Ответы у мелодий"/></TextBlock>
+			<TextBlock><Run Text="Финальный раунд"/></TextBlock>
+			<TextBlock><Run Text="Дополнительная информация о финале"/></TextBlock>
+			<TextBlock><Run Text="О настройках"/></TextBlock>
+			<TextBlock><Run Text="Изменение размера окна"/></TextBlock>
+			<TextBlock><Run Text="Интервалы раундов"/></TextBlock>
+			<TextBlock><Run Text="Баллы за песню второго раунда"/></TextBlock>
+			<TextBlock><Run Text="Горячие клавиши"/></TextBlock>
+			<TextBlock><Run Text="Интернет"/></TextBlock>
+			<TextBlock><Run Text="Серверная часть"/></TextBlock>
+			<TextBlock><Run Text="Клиенская часть"/></TextBlock>
+			<TextBlock><Run Text="Работа со своим сервером"/></TextBlock>
+			<TextBlock><Run Text="Варианты клиенской части"/></TextBlock>
+			<TextBlock><Run Text="Возможные баги в настройках"/></TextBlock>
+			<TextBlock><Run Text="Дополнительная информация"/></TextBlock>
+		</ComboBox>
+	</Grid>
+</Window>
