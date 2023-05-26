@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +15,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using System.Timers;
+using System.Globalization;
 //using Path = System.IO.Path;
 
 namespace NEW_UM
@@ -44,6 +48,9 @@ namespace NEW_UM
         private string[] _buttonPlay = ConfigurationManager.AppSettings["BtnPlay"]?.Split('+');
         private string[] _buttonAnswer = ConfigurationManager.AppSettings["BtnAnswer"]?.Split('+');
         private string[] _buttonFinal = ConfigurationManager.AppSettings["BtnFinal"]?.Split('+');
+        private System.Timers.Timer _timer_answer;
+        private Dictionary<string, TimeSpan> _messages = new Dictionary<string, TimeSpan>();
+        //private Dictionary<string, DateTime> _playerMessages;
 
         public MainWindow()
         {
@@ -51,7 +58,7 @@ namespace NEW_UM
             _timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(int.Parse(ConfigurationManager.AppSettings["Interval1r"])) // в будущем будет возможность изменить время
-        };
+            };
             _timer.Tick += (sender, e) => TimerTick();
             try
             {
@@ -75,6 +82,9 @@ namespace NEW_UM
             {
                 MessageBox.Show(ex.Message);
             }
+            _timer_answer = new System.Timers.Timer(1000); // Таймер с интервалом 1 секунда
+            _timer_answer.Elapsed += TimerElapsed;
+            //_playerMessages = new Dictionary<string, DateTime>();
         }
 
         public void RefreshButton()
@@ -85,7 +95,7 @@ namespace NEW_UM
             _buttonFinal = ConfigurationManager.AppSettings["BtnFinal"]?.Split('+');
         }
 
-        public async void InternetEnable()//object sender, RoutedEventArgs e)
+        public async Task InternetEnable()
         {
             try
             {
@@ -102,19 +112,37 @@ namespace NEW_UM
                     byte[] buffer = new byte[1024];
                     int bytes = await _socket.ReceiveAsync(new ArraySegment<byte>(buffer), SocketFlags.None);
                     string message = Encoding.UTF8.GetString(buffer, 0, bytes);
+                    //MessageBox.Show(message);
                     if (message.IndexOf("Вы подключились как суперклиент") != 0)
                     {
                         string[] parts = message.Split(':');
+                        string playerName = parts[6];
+                        string[] patrs_ping = parts[5].Split(',');
+                        string ping_play = patrs_ping[0];
+                        string messageTime = message.Substring(0, message.IndexOf(parts[4])-1);                        
+                        bool isTimeValid = DateTime.TryParseExact(messageTime, "dd.MM.yyyy hh:mm:ss:fff", null, DateTimeStyles.None, out DateTime parsedTime);
+
+                        if (!_messages.ContainsKey(playerName))
+                        {
+                            TimeSpan resultTime = new TimeSpan();
+                            if (int.TryParse(ping_play, out int milliseconds))
+                            {
+                                TimeSpan timeSpanToSubtract = TimeSpan.FromMilliseconds(milliseconds * 3);
+                                resultTime = parsedTime.TimeOfDay - timeSpanToSubtract;
+                            }
+                            _messages.Add(playerName, resultTime);
+                        }
                         if (_player == 1 && _round != "ФИНАЛ")
                         {
                             if (_round == "2 РАУНД" && _ipoints < _delay)
                                 continue;
                             else
                             {
+
                                 player.Pause();
                                 _timer.Stop();
+                                _timer_answer.Start();
                                 _player = 0;
-                                MessageBox.Show($"Отвечает: {parts[6]}");
                             }
                         }
                     }
@@ -127,6 +155,33 @@ namespace NEW_UM
                 MessageBox.Show($"Ошибка подключения: {ex.Message}");
             }
         }
+
+        private void TimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            _timer_answer.Stop();
+            int K = 0;
+
+            List<KeyValuePair<string, TimeSpan>> sortedMessages = _messages.ToList();
+
+            // Сортировка списка по resultTime
+            sortedMessages.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+
+            StringBuilder messageBuilder = new StringBuilder();
+
+            foreach (KeyValuePair<string, TimeSpan> playerMessage in sortedMessages)
+            {
+                string playerName = playerMessage.Key;
+                TimeSpan resultTime = playerMessage.Value;
+                string formattedMessage = $"{++K}. Отвечает:{playerName} (Время: {resultTime.ToString(@"hh\:mm\:ss\:fff")})";
+                messageBuilder.AppendLine(formattedMessage);
+            }
+
+            string allMessages = messageBuilder.ToString();
+            MessageBox.Show(allMessages);
+            _messages.Clear();
+        }
+
+
 
         public void InternetDisable()//object sender, RoutedEventArgs e)
         {
@@ -413,7 +468,7 @@ namespace NEW_UM
             }
         }
 
-            private void Cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _timer.Stop();
             player.Stop();
@@ -500,8 +555,8 @@ namespace NEW_UM
                 Background = Brushes.AntiqueWhite
             };
             layoutGrid.Children.Add(button);
-            if(_finalcount>1)
-            layoutGrid.Children.Add(button1);
+            if (_finalcount > 1)
+                layoutGrid.Children.Add(button1);
             layoutGrid.Children.Add(slider);
             layoutGrid.Children.Add(_finalText);
             slider.Value = 20;
@@ -629,7 +684,7 @@ namespace NEW_UM
                 _timer.Start();
             }
             else
-            { 
+            {
                 MessageBox.Show("Песен для финала нет");
                 layoutGrid.Children.Clear();
             }
@@ -650,7 +705,7 @@ namespace NEW_UM
             _player = 0;
         }
 
-            private void ShowSettingsButton_Click(object sender, RoutedEventArgs e)
+        private void ShowSettingsButton_Click(object sender, RoutedEventArgs e)
         {
             var settingsWindow = new SettingsWindow(this);
             settingsWindow.ShowDialog();
@@ -671,9 +726,9 @@ namespace NEW_UM
         }
         public void SetSetting()
         {
-            if(_round=="1 РАУНД")
+            if (_round == "1 РАУНД")
                 _timer.Interval = TimeSpan.FromMilliseconds(int.Parse(ConfigurationManager.AppSettings["Interval1r"]));
-            if (_round=="2 РАУНД")
+            if (_round == "2 РАУНД")
                 _timer.Interval = TimeSpan.FromMilliseconds(int.Parse(ConfigurationManager.AppSettings["Interval2r"]));
         }
         private void PrigressBarAdd() => ++progress.Value;
