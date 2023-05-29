@@ -66,3 +66,6 @@ C:\Users\PitBu\Desktop\111\NEW-UM\obj\Release\NEW-UM.exe
 C:\Users\PitBu\Desktop\111\NEW-UM\obj\Release\NEW-UM.pdb
 C:\Users\tpa.admin\source\repos\NEW-UM\obj\Release\Info.g.cs
 C:\Users\tpa.admin\source\repos\NEW-UM\obj\Release\Info.baml
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Release\WpfAnimatedGif.dll
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Release\WpfAnimatedGif.pdb
+C:\Users\tpa.admin\source\repos\NEW-UM\bin\Release\WpfAnimatedGif.xml

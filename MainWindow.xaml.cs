@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,7 +16,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Timers;
 using System.Globalization;
-//using Path = System.IO.Path;
 
 namespace NEW_UM
 {
@@ -48,9 +46,8 @@ namespace NEW_UM
         private string[] _buttonPlay = ConfigurationManager.AppSettings["BtnPlay"]?.Split('+');
         private string[] _buttonAnswer = ConfigurationManager.AppSettings["BtnAnswer"]?.Split('+');
         private string[] _buttonFinal = ConfigurationManager.AppSettings["BtnFinal"]?.Split('+');
-        private System.Timers.Timer _timer_answer;
-        private Dictionary<string, TimeSpan> _messages = new Dictionary<string, TimeSpan>();
-        //private Dictionary<string, DateTime> _playerMessages;
+        private readonly System.Timers.Timer _timer_answer;
+        private readonly Dictionary<string, TimeSpan> _messages = new Dictionary<string, TimeSpan>();
 
         public MainWindow()
         {
@@ -84,7 +81,6 @@ namespace NEW_UM
             }
             _timer_answer = new System.Timers.Timer(1000); // Таймер с интервалом 1 секунда
             _timer_answer.Elapsed += TimerElapsed;
-            //_playerMessages = new Dictionary<string, DateTime>();
         }
 
         public void RefreshButton()
@@ -105,14 +101,12 @@ namespace NEW_UM
                 // Отправка сообщения на сервер
                 byte[] data = Encoding.UTF8.GetBytes($"3|{DateTime.Now:dd.MM.yyyy hh:mm:ss:fff}|{superClientId}");
                 await _socket.SendAsync(new ArraySegment<byte>(data), SocketFlags.None);
-
                 // Получение сообщений от сервера
                 while (true)
                 {
                     byte[] buffer = new byte[1024];
                     int bytes = await _socket.ReceiveAsync(new ArraySegment<byte>(buffer), SocketFlags.None);
                     string message = Encoding.UTF8.GetString(buffer, 0, bytes);
-                    //MessageBox.Show(message);
                     if (message.IndexOf("Вы подключились как суперклиент") != 0)
                     {
                         string[] parts = message.Split(':');
@@ -121,7 +115,6 @@ namespace NEW_UM
                         string ping_play = patrs_ping[0];
                         string messageTime = message.Substring(0, message.IndexOf(parts[4])-1);                        
                         bool isTimeValid = DateTime.TryParseExact(messageTime, "dd.MM.yyyy hh:mm:ss:fff", null, DateTimeStyles.None, out DateTime parsedTime);
-
                         if (!_messages.ContainsKey(playerName))
                         {
                             TimeSpan resultTime = new TimeSpan();
@@ -160,30 +153,23 @@ namespace NEW_UM
         {
             _timer_answer.Stop();
             int K = 0;
-
             List<KeyValuePair<string, TimeSpan>> sortedMessages = _messages.ToList();
-
             // Сортировка списка по resultTime
             sortedMessages.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
-
             StringBuilder messageBuilder = new StringBuilder();
-
             foreach (KeyValuePair<string, TimeSpan> playerMessage in sortedMessages)
             {
                 string playerName = playerMessage.Key;
                 TimeSpan resultTime = playerMessage.Value;
-                string formattedMessage = $"{++K}. Отвечает:{playerName} (Время: {resultTime.ToString(@"hh\:mm\:ss\:fff")})";
+                string formattedMessage = $"{++K}. Отвечает:{playerName} (Время: {resultTime:hh\\:mm\\:ss\\:fff})";
                 messageBuilder.AppendLine(formattedMessage);
             }
-
             string allMessages = messageBuilder.ToString();
             MessageBox.Show(allMessages);
             _messages.Clear();
         }
 
-
-
-        public void InternetDisable()//object sender, RoutedEventArgs e)
+        public void InternetDisable()
         {
             if (_socket != null && _socket.Connected)
             {
@@ -287,7 +273,6 @@ namespace NEW_UM
                 MessageBox.Show("Строка не определена");
                 return;
             }
-            //MessageBox.Show(_timer.Interval.ToString());
             MusicPlay(textBox.Text, name.Substring(3, 1));
         }
 
@@ -295,11 +280,9 @@ namespace NEW_UM
         {
             string str1 = $"../{_round}/{I}/";
             _answer = $"../{_round}/{I}/Ответ/{No}.mp3";
-            //MessageBox.Show($"{str1}{No}.mp3");
             player.Open(new Uri($"{str1}{No}.mp3", UriKind.RelativeOrAbsolute));
             player.Play();
             _player = 1;
-
             if (_round == "1 РАУНД")
             {
                 string[] lines = File.ReadAllLines($"{str1}Баллы.txt", Encoding.UTF8);
@@ -599,7 +582,6 @@ namespace NEW_UM
                                     }
                                 }
                                 // Выводим результат
-                                //MessageBox.Show("Осталось строк после ФИНАЛ: " + remainingLinesArray.Length);
                                 break;
                             case var s when s == roundName:
                                 imageback.Source = new BitmapImage(new Uri(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), imagePath)));
@@ -675,7 +657,6 @@ namespace NEW_UM
 
         private void Button_Click1(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show($"{_finalcount} > 0 && {_finalcount} < {_finalcount2}");
             if (_finalcount > 0)
             {
                 player.Open(new Uri($"../final{_finalcount2}.mp3", UriKind.RelativeOrAbsolute));
@@ -699,7 +680,6 @@ namespace NEW_UM
             slider.Value = 20;
             if (_finalcount == _finalcount2)
             {
-                //MessageBox.Show("Песен больше нет");
                 layoutGrid.Children.Remove(button1);
             }
             _player = 0;
@@ -710,7 +690,6 @@ namespace NEW_UM
             var settingsWindow = new SettingsWindow(this);
             settingsWindow.ShowDialog();
         }
-
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {

@@ -10,7 +10,7 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-		<ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+		<ScrollViewer x:Name="scrollViewer" Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
 			<StackPanel Margin="15,5,15,5">
 				<TextBlock x:Name="text" Text="" FontSize="15" TextWrapping="Wrap"/>
 				<Image x:Name="image" HorizontalAlignment="Left" VerticalAlignment="Bottom" Stretch="Fill"/>
@@ -36,7 +36,7 @@
 			<TextBlock><Run Text="Работа со своим сервером"/></TextBlock>
 			<TextBlock><Run Text="Варианты клиенской части"/></TextBlock>
 			<TextBlock><Run Text="Возможные баги в настройках"/></TextBlock>
-			<TextBlock><Run Text="Дополнительная информация"/></TextBlock>
+			<TextBlock><Run Text="О программе"/></TextBlock>
 		</ComboBox>
 	</Grid>
 </Window>

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Configuration;
-using System.Diagnostics;
+﻿using System.Configuration;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -40,22 +37,6 @@ namespace NEW_UM
             play_btn.Content = ConfigurationManager.AppSettings["BtnPlay"];
             answer_btn.Content = ConfigurationManager.AppSettings["BtnAnswer"];
             final_btn.Content = ConfigurationManager.AppSettings["BtnFinal"];
-            info.Text = $"Информация о ПО:\n\nАвтор: PitBul477\nВерсия программы: 4.0\n\nПоддержать можно по следующей ссылке:\n";
-            Run run1 = new Run("Donation Alerts");
-            Hyperlink hyperlink = new Hyperlink(run1)
-            {
-                NavigateUri = new Uri("https://www.donationalerts.com/r/pitbul477")
-            };
-            hyperlink.RequestNavigate += new System.Windows.Navigation.RequestNavigateEventHandler(Hyperlink_Click);
-            info.Inlines.Add(hyperlink);
-            info.Inlines.Add($"\n\nДополнительная информация и связь с автором через телеграм: ");
-            Run run2 = new Run("Угадай Мелодию");
-            hyperlink = new Hyperlink(run2)
-            {
-                NavigateUri = new Uri("https://t.me/UgadaiMelody")
-            };
-            hyperlink.RequestNavigate += new System.Windows.Navigation.RequestNavigateEventHandler(Hyperlink2_Click);
-            info.Inlines.Add(hyperlink);
             _pressedKeys = string.Empty;
             DataContext = this;
         }
@@ -151,15 +132,6 @@ namespace NEW_UM
                 mainWindow.SetSetting();
             }
         }
-        //private void Setting_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //    RecordKey(e.Key);
-        //}
-
-        void Hyperlink_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://www.donationalerts.com/r/pitbul477"); //открытие ссылки в браузере
-        }
 
         private void Click_Set_Button(object sender, RoutedEventArgs e)
         {
@@ -181,7 +153,7 @@ namespace NEW_UM
                     _btn = 4;
                     break;
             }
-            button.Background = new SolidColorBrush(Color.FromArgb(255, 0, 255, 0));
+            button.Background = new SolidColorBrush(Color.FromArgb(255, 17, 100, 180));
             ButtonLabel.Visibility = Visibility.Visible;
             ButtonLabel.Foreground = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
             button.PreviewKeyDown += Button_PreviewKeyDown;
@@ -197,7 +169,7 @@ namespace NEW_UM
 
         public string PressedKeys
         {
-            get {return _pressedKeys; }
+            get { return _pressedKeys; }
             set
             {
                 _pressedKeys = value;
@@ -256,7 +228,6 @@ namespace NEW_UM
             return key == Key.LeftShift || key == Key.RightShift || key == Key.LeftCtrl || key == Key.RightCtrl;
         }
 
-
         private void Button_Click_Apply_btn(object sender, RoutedEventArgs e)
         {
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -268,48 +239,88 @@ namespace NEW_UM
                     if (ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnPlay"] || ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnAnswer"] || ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnFinal"])
                     {
                         ButtonLabel.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                        stop.ClearValue(BackgroundProperty);
+                        stop.Style = (Style)this.FindResource("CustomButtonStyle");
                         return;
                     }
-                        ConfigurationManager.AppSettings["BtnStop"] = ButtonLabel.Content.ToString();
+                    if (ButtonLabel.Content.ToString() == "")
+                    {
+                        ButtonLabel.Content = "КЛАВИША\nНЕ НАЖАТА";
+                        ButtonLabel.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                        stop.ClearValue(BackgroundProperty);
+                        stop.Style = (Style)this.FindResource("CustomButtonStyle");
+                        return;
+                    }
+                    ConfigurationManager.AppSettings["BtnStop"] = ButtonLabel.Content.ToString();
                     config.AppSettings.Settings["BtnStop"].Value = ButtonLabel.Content.ToString();
                     stop_btn.Content = ConfigurationManager.AppSettings["BtnStop"];
-                    //stop.Background = new SolidColorBrush(Color.FromArgb(255, 0, 100, 0));
+                    stop.ClearValue(BackgroundProperty);
                     stop.Style = (Style)this.FindResource("CustomButtonStyle");
                     break;
                 case 2:
                     if (ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnStop"] || ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnAnswer"] || ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnFinal"])
                     {
                         ButtonLabel.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                        play.ClearValue(BackgroundProperty);
+                        play.Style = (Style)this.FindResource("CustomButtonStyle");
+                        return;
+                    }
+                    if (ButtonLabel.Content.ToString() == "")
+                    {
+                        ButtonLabel.Content = "КЛАВИША\nНЕ НАЖАТА";
+                        ButtonLabel.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                        play.ClearValue(BackgroundProperty);
+                        play.Style = (Style)this.FindResource("CustomButtonStyle");
                         return;
                     }
                     ConfigurationManager.AppSettings["BtnPlay"] = ButtonLabel.Content.ToString();
                     config.AppSettings.Settings["BtnPlay"].Value = ButtonLabel.Content.ToString();
                     play_btn.Content = ConfigurationManager.AppSettings["BtnPlay"];
-                    //play.Background = new SolidColorBrush(Color.FromArgb(255, 127, 255, 0));
+                    play.ClearValue(BackgroundProperty);
                     play.Style = (Style)this.FindResource("CustomButtonStyle");
                     break;
                 case 3:
                     if (ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnStop"] || ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnPlay"] || ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnFinal"])
                     {
                         ButtonLabel.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                        answer.ClearValue(BackgroundProperty);
+                        answer.Style = (Style)this.FindResource("CustomButtonStyle");
+                        return;
+                    }
+                    if (ButtonLabel.Content.ToString() == "")
+                    {
+                        ButtonLabel.Content = "КЛАВИША\nНЕ НАЖАТА";
+                        ButtonLabel.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                        answer.ClearValue(BackgroundProperty);
+                        answer.Style = (Style)this.FindResource("CustomButtonStyle");
                         return;
                     }
                     ConfigurationManager.AppSettings["BtnAnswer"] = ButtonLabel.Content.ToString();
                     config.AppSettings.Settings["BtnAnswer"].Value = ButtonLabel.Content.ToString();
                     answer_btn.Content = ConfigurationManager.AppSettings["BtnAnswer"];
-                    //answer.Background = new SolidColorBrush(Color.FromArgb(255, 0, 100, 0));
+                    answer.ClearValue(BackgroundProperty);
                     answer.Style = (Style)this.FindResource("CustomButtonStyle");
                     break;
                 case 4:
                     if (ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnStop"] || ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnPlay"] || ButtonLabel.Content.ToString() == ConfigurationManager.AppSettings["BtnAnswer"])
                     {
                         ButtonLabel.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                        final.ClearValue(BackgroundProperty);
+                        final.Style = (Style)this.FindResource("CustomButtonStyle");
+                        return;
+                    }
+                    if (ButtonLabel.Content.ToString() == "")
+                    {
+                        ButtonLabel.Content = "КЛАВИША\nНЕ НАЖАТА";
+                        ButtonLabel.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                        final.ClearValue(BackgroundProperty);
+                        final.Style = (Style)this.FindResource("CustomButtonStyle");
                         return;
                     }
                     ConfigurationManager.AppSettings["BtnFinal"] = ButtonLabel.Content.ToString();
                     config.AppSettings.Settings["BtnFinal"].Value = ButtonLabel.Content.ToString();
                     final_btn.Content = ConfigurationManager.AppSettings["BtnFinal"];
-                    //final.Background = new SolidColorBrush(Color.FromArgb(255, 0, 100, 0));
+                    final.ClearValue(BackgroundProperty);
                     final.Style = (Style)this.FindResource("CustomButtonStyle");
                     break;
                 default:
@@ -319,9 +330,9 @@ namespace NEW_UM
             ConfigurationManager.RefreshSection("appSettings");
             mainWindow.RefreshButton();
             ButtonLabel.Visibility = Visibility.Hidden;
+            ButtonLabel.Content = "";
             _pressedKeys = string.Empty;
         }
-
 
         private void Button_Click_Default_btn(object sender, RoutedEventArgs e)
         {
@@ -342,6 +353,7 @@ namespace NEW_UM
             ConfigurationManager.RefreshSection("appSettings");
             mainWindow.RefreshButton();
             ButtonLabel.Visibility = Visibility.Hidden;
+            ButtonLabel.Content = "";
             _pressedKeys = string.Empty;
         }
 
@@ -349,11 +361,6 @@ namespace NEW_UM
         {
             var infoWindow = new Info();
             infoWindow.ShowDialog();
-        }
-
-        void Hyperlink2_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://t.me/UgadaiMelody"); //открытие ссылки в браузере
         }
     }
 }
