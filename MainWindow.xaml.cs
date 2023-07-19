@@ -278,6 +278,7 @@ namespace NEW_UM
 
         private void MusicPlay(string I, string No)
         {
+            _messages.Clear();
             string str1 = $"../{_round}/{I}/";
             _answer = $"../{_round}/{I}/Ответ/{No}.mp3";
             player.Open(new Uri($"{str1}{No}.mp3", UriKind.RelativeOrAbsolute));
@@ -341,6 +342,7 @@ namespace NEW_UM
                 bool isMatch = true;
                 foreach (string key in _buttonStop)
                 {
+                    _messages.Clear();
                     if (!Enum.TryParse(key, out Key convertedKey))
                     {
                         // Invalid key in config file, ignore the comparison
@@ -370,6 +372,7 @@ namespace NEW_UM
                 bool isMatch = true;
                 foreach (string key in _buttonPlay)
                 {
+                    _messages.Clear();
                     if (!Enum.TryParse(key, out Key convertedKey))
                     {
                         // Invalid key in config file, ignore the comparison
@@ -399,6 +402,7 @@ namespace NEW_UM
                 bool isMatch = true;
                 foreach (string key in _buttonAnswer)
                 {
+                    _messages.Clear();
                     if (!Enum.TryParse(key, out Key convertedKey))
                     {
                         // Invalid key in config file, ignore the comparison
@@ -455,6 +459,7 @@ namespace NEW_UM
         {
             _timer.Stop();
             player.Stop();
+            _messages.Clear();
             switch (cb.SelectedIndex)
             {
                 case 0:
