@@ -118,7 +118,36 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-
+		<Style x:Key="ch_butt" TargetType="Button">
+			<Setter Property="Background" Value="#00911e42"/>
+			<Setter Property="BorderBrush" Value="Transparent"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Button}">
+						<Grid>
+							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							<!-- Добавляем изображение внутри кнопки -->
+							<Image Source="/Resources/change1.png" Margin="3,3,3,3" Stretch="UniformToFill"/>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="ch_butt2" TargetType="Button">
+			<Setter Property="Background" Value="#00911e42"/>
+			<Setter Property="BorderBrush" Value="Transparent"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Button}">
+						<Grid>
+							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							<!-- Добавляем изображение внутри кнопки -->
+							<Image Source="\Resources\change2.png"  Margin="3,3,3,3" Stretch="UniformToFill"/>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
 	</Window.Resources>
 	<Viewbox x:Name="vb" Stretch="Uniform" Margin="0,-6,-15,-15">
 	<Grid x:Name="layoutGrid" Background="#FFAA1741">

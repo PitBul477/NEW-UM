@@ -638,8 +638,31 @@ namespace NEW_UM
                                             TextWrapping = TextWrapping.Wrap
                                         };
 
+                                        var changeButt = new Button
+                                        {
+                                            Width = 23,
+                                            Height = 23,
+                                            Margin = new Thickness(443, 75 + i * 45, 0, 0),
+                                            VerticalAlignment = VerticalAlignment.Top,
+                                            HorizontalAlignment = HorizontalAlignment.Left,
+                                            Name = "change_button" + i.ToString(),
+                                            Style = (Style)FindResource("ch_butt") // Применяем стиль из ресурсов
+                                        };
+                                        /*/ Добавляем изображение в кнопку
+                                        var image = new Image
+                                        {
+                                            Source = new BitmapImage(new Uri("/Resources/settings.png", UriKind.Relative)),
+                                            Stretch = Stretch.UniformToFill
+                                        };
+                                        // Устанавливаем изображение в качестве содержимого кнопки
+                                        changeButt.Content = image;*/
+                                        // Добавляем обработчик события PreviewTextInput к каждому текстовому полю
+                                        textBox.PreviewTextInput += TextBox_PreviewTextInput;
                                         layoutGrid.Children.Add(textBox);
                                         Grid.SetColumn(textBox, 2);
+                                        layoutGrid.Children.Add(changeButt);
+                                        Grid.SetColumn(changeButt, 2);
+                                        changeButt.Click += CH_Button_Click;
                                         _counterTexts[i] = textBox;
                                     }
                                     // остальные переменные
@@ -659,6 +682,49 @@ namespace NEW_UM
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private void CH_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            string buttonName = button.Name;
+
+            // Извлекаем номер кнопки из имени (предполагается, что имя имеет вид "buttonX", где X - номер)
+            int buttonNumber = int.Parse(buttonName.Substring(13));
+
+            // Получаем стиль кнопки
+            Style buttonStyle = button.Style;
+
+            // Проверяем ключ стиля
+            if (buttonStyle == (Style)FindResource("ch_butt"))
+            {
+                // Если стиль равен "ch_butt", выполняем действия для этого стиля
+                _counterTexts[buttonNumber].IsReadOnly = false;
+                button.Style = (Style)FindResource("ch_butt2");
+            }
+            else if (buttonStyle == (Style)FindResource("ch_butt2"))
+            {
+                // Если стиль равен "ch_butt2", выполняем действия для этого стиля
+                _counterTexts[buttonNumber].IsReadOnly = true;
+                button.Style = (Style)FindResource("ch_butt");
+            }
+            else
+            {
+                // Если стиль неизвестен, выводим сообщение с его именем
+                MessageBox.Show("Что-то не так. Имя стиля: " + buttonStyle.TargetType.Name);
+            }
+        }
+
+        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // Проверяем, является ли вводимый символ цифрой
+            if (!char.IsDigit(e.Text[0]))
+            {
+                // Если символ не цифра, отменяем его обработку
+                e.Handled = true;
+            }
+        }
+
+
 
         private void Button_Click1(object sender, RoutedEventArgs e)
         {
