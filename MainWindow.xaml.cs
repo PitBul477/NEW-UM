@@ -705,6 +705,7 @@ namespace NEW_UM
             {
                 // Если стиль равен "ch_butt2", выполняем действия для этого стиля
                 _counterTexts[buttonNumber].IsReadOnly = true;
+                _counters[buttonNumber] = int.Parse(_counterTexts[buttonNumber].Text);
                 button.Style = (Style)FindResource("ch_butt");
             }
             else
