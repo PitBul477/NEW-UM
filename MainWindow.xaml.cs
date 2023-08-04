@@ -16,6 +16,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Timers;
 using System.Globalization;
+using WPFtoolkitFramework.Controles;
+using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace NEW_UM
 {
@@ -52,6 +55,11 @@ namespace NEW_UM
         public MainWindow()
         {
             InitializeComponent();
+            imagebegin.Source = new BitmapImage(new Uri(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "images/заглушка.png")));
+            //запуск фоновой музыки
+            //;
+            player.Open(new Uri("background.mp3", UriKind.RelativeOrAbsolute));
+            player.Play();
             _timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(int.Parse(ConfigurationManager.AppSettings["Interval1r"])) // в будущем будет возможность изменить время
@@ -725,8 +733,6 @@ namespace NEW_UM
             }
         }
 
-
-
         private void Button_Click1(object sender, RoutedEventArgs e)
         {
             if (_finalcount > 0)
@@ -791,5 +797,14 @@ namespace NEW_UM
             else 
                 return false; }
         private void PrigressBarAdd() => ++progress.Value;
+
+        private void start_btn(object sender, RoutedEventArgs e)
+        {
+            btStart.IsEnabled = false;
+            btStart.Visibility = Visibility.Collapsed;
+            imagebegin.IsEnabled = false;            
+            imagebegin.Visibility = Visibility.Collapsed;
+            cb.SelectedIndex = 0;
+        }
     }
 }
