@@ -759,6 +759,8 @@ namespace NEW_UM
 
         private void ShowSettingsButton_Click(object sender, RoutedEventArgs e)
         {
+            
+            
             var settingsWindow = new SettingsWindow(this);
             settingsWindow.ShowDialog();
         }
@@ -782,6 +784,12 @@ namespace NEW_UM
             if (_round == "2 РАУНД")
                 _timer.Interval = TimeSpan.FromMilliseconds(int.Parse(ConfigurationManager.AppSettings["Interval2r"]));
         }
+        public bool getInternetStatus()
+        {
+            if (_socket != null)
+                return _socket.Connected;
+            else 
+                return false; }
         private void PrigressBarAdd() => ++progress.Value;
     }
 }

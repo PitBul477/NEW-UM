@@ -20,10 +20,20 @@ namespace NEW_UM
         public SettingsWindow(MainWindow mainWindow)
         {
             InitializeComponent();
-            Internet.Checked += InternetEnable;
-            Internet.Unchecked += InternetDisable;
+            //mainWindow.
+            Internet.IsChecked = mainWindow.getInternetStatus();
+            if (Internet.IsChecked == true)
+                _internet = true;
+            else
+                _internet = false;
+            //Internet.Checked += InternetEnable;
+            //Internet.Unchecked += InternetDisable;
             delay2r.Checked += DelayEnable;
             delay2r.Unchecked += DelayDisable;
+            if (mainWindow.ResizeMode == ResizeMode.CanResize)
+                ResizeCheck.IsChecked = true;
+            else if (mainWindow.ResizeMode == ResizeMode.NoResize)
+                ResizeCheck.IsChecked = false;
             ResizeCheck.Checked += ResizeEnable;
             ResizeCheck.Unchecked += ResizeDisable;
             this.mainWindow = mainWindow;
@@ -31,6 +41,7 @@ namespace NEW_UM
             set2r.Text = ConfigurationManager.AppSettings["Interval2r"];
             setIP.Text = ConfigurationManager.AppSettings["IP"];
             setPort.Text = ConfigurationManager.AppSettings["Ports"];
+            delay2r.IsChecked = bool.Parse(ConfigurationManager.AppSettings["CheckDelay2r"]);
             set2r_delay.Text = ConfigurationManager.AppSettings["Delay2r"];
             setpoint2r.Text = ConfigurationManager.AppSettings["MaxPoint2r"];
             stop_btn.Content = ConfigurationManager.AppSettings["BtnStop"];
@@ -39,16 +50,6 @@ namespace NEW_UM
             final_btn.Content = ConfigurationManager.AppSettings["BtnFinal"];
             _pressedKeys = string.Empty;
             DataContext = this;
-        }
-
-        private void InternetEnable(object sender, RoutedEventArgs e)
-        {
-            _internet = true;
-        }
-
-        private void InternetDisable(object sender, RoutedEventArgs e)
-        {
-            _internet = false;
         }
 
         private void ResizeEnable(object sender, RoutedEventArgs e)
@@ -105,13 +106,20 @@ namespace NEW_UM
                 ConfigurationManager.AppSettings["MaxPoint2r"] = max2rVal.ToString();
 
             ConfigurationManager.AppSettings["IP"] = setIP.Text;
-
-            if (_internet == true)
+            ConfigurationManager.AppSettings["CheckDelay2r"] = delay2r.IsChecked.ToString();
+            //MessageBox.Show(Internet.IsChecked.ToString() + "!!" + _internet.ToString());
+            if (Internet.IsChecked == true && _internet == false)
+            {
                 mainWindow.InternetEnable();
-            else if (_internet == false)
+                _internet = true;
+            }
+            else if (Internet.IsChecked == false && _internet == true)
+            {
                 mainWindow.InternetDisable();
+                _internet = false;
+            }
 
-            if (_delay == true)
+                if (_delay == true)
                 mainWindow.SetDelay(delayVal);
             else if (_delay == false)
                 mainWindow.SetDelay(0);
@@ -127,6 +135,7 @@ namespace NEW_UM
                 config.AppSettings.Settings["Interval2r"].Value = points2Val.ToString();
                 config.AppSettings.Settings["Delay2r"].Value = delayVal.ToString();
                 config.AppSettings.Settings["MaxPoint2r"].Value = max2rVal.ToString();
+                config.AppSettings.Settings["CheckDelay2r"].Value = delay2r.IsChecked.ToString();
                 config.Save(ConfigurationSaveMode.Modified);
                 ConfigurationManager.RefreshSection("appSettings");
                 mainWindow.SetSetting();
@@ -362,5 +371,15 @@ namespace NEW_UM
             var infoWindow = new Info();
             infoWindow.ShowDialog();
         }
+
+        /*private void InternetEnable(object sender, RoutedEventArgs e)
+        {
+            _internet = true;
+        }
+
+        private void InternetDisable(object sender, RoutedEventArgs e)
+        {
+            _internet = false;
+        }*/
     }
 }
